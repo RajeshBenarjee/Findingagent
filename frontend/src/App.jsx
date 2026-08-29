@@ -336,7 +336,7 @@ export default function App() {
         </main>
       ) : (
         <main className="scraper-main" style={{ maxWidth: '1600px', width: '95%', margin: '2.5rem auto', padding: '0 1rem' }}>
-          <CareerScraper />
+          <CareerScraper studentSkills={lastFormInput?.skills || []} />
         </main>
       )}
 

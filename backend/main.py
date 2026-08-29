@@ -118,16 +118,24 @@ def trigger_email_alert(payload: EmailAlertRequest):
         raise HTTPException(status_code=500, detail=f"Failed to trigger email alert: {str(e)}")
 
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 
 class ScrapeRequest(BaseModel):
+    selected_companies: List[str]
+    custom_url: Optional[str] = None
+    student_skills: Optional[List[str]] = None
     api_key: Optional[str] = None
 
 @app.post("/api/scrape")
 def scrape_tech_companies(payload: ScrapeRequest):
     from scraper_agent import run_multi_agent_scrape
     try:
-        res = run_multi_agent_scrape(payload.api_key)
+        res = run_multi_agent_scrape(
+            selected_companies=payload.selected_companies,
+            custom_url=payload.custom_url,
+            student_skills=payload.student_skills,
+            api_key_override=payload.api_key
+        )
         return res
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to run multi-agent scrape: {str(e)}")

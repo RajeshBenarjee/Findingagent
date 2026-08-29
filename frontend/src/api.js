@@ -51,13 +51,18 @@ export async function sendEmailAlert(emailPayload) {
   return response.json();
 }
 
-export async function runWebScraper(apiKey) {
+export async function runWebScraper(selectedCompanies, customUrl, studentSkills, apiKey) {
   const response = await fetch(`${API_BASE_URL}/scrape`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ api_key: apiKey || null }),
+    body: JSON.stringify({ 
+      selected_companies: selectedCompanies || [],
+      custom_url: customUrl || null,
+      student_skills: studentSkills || [],
+      api_key: apiKey || null 
+    }),
   });
 
   if (!response.ok) {

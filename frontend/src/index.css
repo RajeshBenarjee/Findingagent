@@ -1885,6 +1885,117 @@ input:checked + .slider:before {
   font-weight: 600;
 }
 
+/* Company Selector UI */
+.company-selection-section {
+  margin-top: 1.25rem;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.section-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.bulk-selection-buttons {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.divider {
+  color: #cbd5e1;
+}
+
+.text-blue {
+  color: #2563eb !important;
+}
+
+.text-red {
+  color: #ef4444 !important;
+}
+
+.company-selection-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+}
+
+@media (min-width: 576px) {
+  .company-selection-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+  .company-selection-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.company-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: #f8fafc;
+  transition: all 0.15s;
+}
+
+.company-checkbox-item:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.checkbox-active {
+  background-color: #eff6ff;
+  border-color: #93c5fd;
+  color: #1e40af;
+  font-weight: 700;
+}
+
+.custom-url-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.custom-url-row label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.custom-url-row input {
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.text-green-bold {
+  color: #16a34a !important;
+  font-weight: 700;
+}
+
+.text-orange-bold {
+  color: #ea580c !important;
+  font-weight: 700;
+}
+
+
 
 
 
