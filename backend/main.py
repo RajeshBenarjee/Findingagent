@@ -168,5 +168,4 @@ def import_scraped_opportunities(payload: List[InternshipOpportunity]):
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to import opportunities: {str(e)}")
-
-
+# Trigger reload after installing requests dependency

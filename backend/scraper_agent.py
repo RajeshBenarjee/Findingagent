@@ -47,6 +47,350 @@ MOCK_CAREER_TEXTS = {
     "Coinbase": "Coinbase Blockchain & Smart Contracts Intern. Duration: 12 weeks. Requires Solidity, Go, and Git. B.Tech III/IV year. CGPA ≥ 8.2. Starts 05 Oct. Instructions: Apply on Coinbase jobs page."
 }
 
+# Fallback dataset containing structured listings for the 20 companies
+FALLBACK_SCRAPED = [
+    {
+        "title": "Google Software Engineering Intern",
+        "organization": "Google",
+        "domain": "Software Engineering",
+        "required_skills": ["Python", "Go", "Algorithms"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "30 Sept",
+        "application_link": "https://careers.google.com/jobs",
+        "status": "Open",
+        "start_date": "10 Oct",
+        "application_instructions": "Apply on Google Careers portal."
+    },
+    {
+        "title": "Microsoft Data Science Intern",
+        "organization": "Microsoft",
+        "domain": "Data Science",
+        "required_skills": ["Python", "SQL", "Machine Learning"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 8.0
+        },
+        "duration": "12 weeks",
+        "deadline": "28 Sept",
+        "application_link": "https://careers.microsoft.com",
+        "status": "Open",
+        "start_date": "15 Oct",
+        "application_instructions": "Submit CV via MS Careers portal."
+    },
+    {
+        "title": "Meta Frontend Engineer Intern",
+        "organization": "Meta",
+        "domain": "Web Development",
+        "required_skills": ["JavaScript", "React", "CSS"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["II", "III"],
+            "min_cgpa": null
+        },
+        "duration": "8 weeks",
+        "deadline": "05 Oct",
+        "application_link": "https://meta.com/careers",
+        "status": "Open",
+        "start_date": "20 Oct",
+        "application_instructions": "Register on Meta Careers portal."
+    },
+    {
+        "title": "Amazon Cloud Developer Intern",
+        "organization": "Amazon",
+        "domain": "Cloud Computing",
+        "required_skills": ["AWS", "Linux", "Python"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 7.0
+        },
+        "duration": "8 weeks",
+        "deadline": "22 Sept",
+        "application_link": "https://amazon.jobs",
+        "status": "Open",
+        "start_date": "05 Oct",
+        "application_instructions": "Apply through Amazon Jobs."
+    },
+    {
+        "title": "Apple iOS Development Intern",
+        "organization": "Apple",
+        "domain": "Mobile Development",
+        "required_skills": ["Swift", "iOS", "Xcode"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "12 Sept",
+        "application_link": "https://apple.com/careers",
+        "status": "Open",
+        "start_date": "12 Oct",
+        "application_instructions": "Send application to ios-intern@apple.com."
+    },
+    {
+        "title": "Netflix UI/UX Design Intern",
+        "organization": "Netflix",
+        "domain": "UI/UX Design",
+        "required_skills": ["Figma", "Wireframing"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["II", "III"],
+            "min_cgpa": null
+        },
+        "duration": "6 weeks",
+        "deadline": "19 Sept",
+        "application_link": "https://jobs.netflix.com",
+        "status": "Open",
+        "start_date": "18 Oct",
+        "application_instructions": "Submit portfolio on Netflix jobs site."
+    },
+    {
+        "title": "Stripe Backend Engineer Intern",
+        "organization": "Stripe",
+        "domain": "Software Engineering",
+        "required_skills": ["Ruby", "Python", "SQL"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "25 Sept",
+        "application_link": "https://stripe.com/jobs",
+        "status": "Open",
+        "start_date": "01 Oct",
+        "application_instructions": "Apply on Stripe Jobs board."
+    },
+    {
+        "title": "Uber Systems Engineering Intern",
+        "organization": "Uber",
+        "domain": "Software Engineering",
+        "required_skills": ["C++", "Linux", "Git"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 7.5
+        },
+        "duration": "8 weeks",
+        "deadline": "29 Sept",
+        "application_link": "https://careers.uber.com",
+        "status": "Open",
+        "start_date": "14 Oct",
+        "application_instructions": "Apply via Uber Careers page."
+    },
+    {
+        "title": "Tesla Autopilot AI Intern",
+        "organization": "Tesla",
+        "domain": "AI/ML",
+        "required_skills": ["Python", "PyTorch", "Deep Learning"],
+        "eligibility": {
+            "programme": "B.Tech CSE",
+            "years": ["IV"],
+            "min_cgpa": 8.5
+        },
+        "duration": "12 weeks",
+        "deadline": "10 Oct",
+        "application_link": "https://tesla.com/careers",
+        "status": "Open",
+        "start_date": "20 Oct",
+        "application_instructions": "Submit Github profile on Tesla portal."
+    },
+    {
+        "title": "Airbnb Full-Stack Engineer Intern",
+        "organization": "Airbnb",
+        "domain": "Software Engineering",
+        "required_skills": ["JavaScript", "Node.js", "SQL"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 7.5
+        },
+        "duration": "8 weeks",
+        "deadline": "15 Sept",
+        "application_link": "https://careers.airbnb.com",
+        "status": "Open",
+        "start_date": "10 Oct",
+        "application_instructions": "Apply via Airbnb careers page."
+    },
+    {
+        "title": "Nvidia Deep Learning Hardware Intern",
+        "organization": "Nvidia",
+        "domain": "AI/ML",
+        "required_skills": ["Python", "C++", "CUDA"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 8.5
+        },
+        "duration": "12 weeks",
+        "deadline": "01 Oct",
+        "application_link": "https://nvidia.com/careers",
+        "status": "Open",
+        "start_date": "01 Oct",
+        "application_instructions": "Apply on Nvidia careers portal."
+    },
+    {
+        "title": "Oracle Database Engineering Intern",
+        "organization": "Oracle",
+        "domain": "Software Engineering",
+        "required_skills": ["SQL", "Java", "Database Systems"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["II", "III"],
+            "min_cgpa": 7.0
+        },
+        "duration": "8 weeks",
+        "deadline": "10 Oct",
+        "application_link": "https://oracle.com/careers",
+        "status": "Open",
+        "start_date": "10 Oct",
+        "application_instructions": "Submit CV on Oracle jobs board."
+    },
+    {
+        "title": "Adobe Creative Cloud Graphics Intern",
+        "organization": "Adobe",
+        "domain": "UI/UX Design",
+        "required_skills": ["C++", "WebAssembly", "Figma"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "05 Oct",
+        "application_link": "https://adobe.com/careers",
+        "status": "Open",
+        "start_date": "05 Oct",
+        "application_instructions": "Register on Adobe Careers portal."
+    },
+    {
+        "title": "Salesforce Systems Analyst Intern",
+        "organization": "Salesforce",
+        "domain": "Software Engineering",
+        "required_skills": ["Java", "SQL", "Git"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 7.5
+        },
+        "duration": "8 weeks",
+        "deadline": "12 Oct",
+        "application_link": "https://salesforce.com/careers",
+        "status": "Open",
+        "start_date": "12 Oct",
+        "application_instructions": "Apply through Salesforce student jobs."
+    },
+    {
+        "title": "Intel Firmware Developer Intern",
+        "organization": "Intel",
+        "domain": "Software Engineering",
+        "required_skills": ["C", "Linux", "Assembly"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 7.5
+        },
+        "duration": "12 weeks",
+        "deadline": "15 Oct",
+        "application_link": "https://intel.com/careers",
+        "status": "Open",
+        "start_date": "15 Oct",
+        "application_instructions": "Send resume to intel-placements@intel.com."
+    },
+    {
+        "title": "Spotify Audio Recommendation Intern",
+        "organization": "Spotify",
+        "domain": "AI/ML",
+        "required_skills": ["Python", "Machine Learning", "SQL"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "08 Oct",
+        "application_link": "https://spotify.com/careers",
+        "status": "Open",
+        "start_date": "08 Oct",
+        "application_instructions": "Apply on Spotify jobs board."
+    },
+    {
+        "title": "X Backend Scaling Intern",
+        "organization": "X (Twitter)",
+        "domain": "Software Engineering",
+        "required_skills": ["Scala", "Python", "Git"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "20 Oct",
+        "application_link": "https://x.com/careers",
+        "status": "Open",
+        "start_date": "20 Oct",
+        "application_instructions": "Apply online at X Careers."
+    },
+    {
+        "title": "LinkedIn Analytics & Insights Intern",
+        "organization": "LinkedIn",
+        "domain": "Data Science",
+        "required_skills": ["SQL", "Python", "Data Visualization"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "10 Oct",
+        "application_link": "https://linkedin.com/careers",
+        "status": "Open",
+        "start_date": "10 Oct",
+        "application_instructions": "Apply through LinkedIn Jobs portal."
+    },
+    {
+        "title": "Zoom Video Streaming Engineer Intern",
+        "organization": "Zoom",
+        "domain": "Software Engineering",
+        "required_skills": ["C++", "WebRTC", "Linux"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 7.8
+        },
+        "duration": "8 weeks",
+        "deadline": "15 Oct",
+        "application_link": "https://zoom.us/careers",
+        "status": "Open",
+        "start_date": "15 Oct",
+        "application_instructions": "Register at Zoom careers portal."
+    },
+    {
+        "title": "Coinbase Blockchain & Smart Contracts Intern",
+        "organization": "Coinbase",
+        "domain": "Software Engineering",
+        "required_skills": ["Solidity", "Go", "Git"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 8.2
+        },
+        "duration": "12 weeks",
+        "deadline": "05 Oct",
+        "application_link": "https://coinbase.com/careers",
+        "status": "Open",
+        "start_date": "05 Oct",
+        "application_instructions": "Apply on Coinbase jobs page."
+    }
+]
+
 def clean_html_to_text(html: str) -> str:
     html = re.sub(r'<(script|style).*?>.*?</\1>', '', html, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r'<[^>]*>', ' ', html)
@@ -218,7 +562,6 @@ def run_multi_agent_scrape(
                 else:
                     logs.append(f"[Extractor Agent] 🤖 (Local Smart Mode) Parsing portal text using local NLP engine...")
                     
-                from scraper_agent import FALLBACK_SCRAPED
                 fallback_matches = [item for item in FALLBACK_SCRAPED if company.lower() in item["organization"].lower() or company.lower() in item["title"].lower()]
                 if fallback_matches:
                     extracted_item = fallback_matches[0]
