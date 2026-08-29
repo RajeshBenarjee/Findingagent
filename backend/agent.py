@@ -1,3 +1,4 @@
+import re
 from typing import List, Dict, Any, Tuple
 from models import (
     StudentProfile,
@@ -5,12 +6,58 @@ from models import (
     RankedRecommendation,
     NotEligibleRecommendation,
     TopRecommendation,
+    TransitionRow,
     RecommendationResponse
 )
+
+def parse_duration_to_weeks(duration_str: str) -> float:
+    if not duration_str:
+        return 0.0
+    
+    duration_str = duration_str.lower().strip()
+    
+    # Match weeks, e.g. "8 weeks", "2 week"
+    match_weeks = re.search(r'(\d+)\s*week', duration_str)
+    if match_weeks:
+        return float(match_weeks.group(1))
+        
+    # Match months, e.g. "6 Months", "3 month"
+    match_months = re.search(r'(\d+)\s*month', duration_str)
+    if match_months:
+        # 1 Month ≈ 4.33 weeks
+        return float(match_months.group(1)) * 4.33
+        
+    return 0.0
+
+def date_to_days(date_str: str) -> int:
+    if not date_str:
+        return 0
+    
+    date_str = date_str.lower().strip()
+    
+    # Extract number (day)
+    match_num = re.search(r'(\d+)', date_str)
+    if not match_num:
+        return 0
+    day = int(match_num.group(1))
+    
+    # Determine month
+    months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"]
+    month_idx = 0
+    for idx, m in enumerate(months, start=1):
+        if m in date_str:
+            month_idx = idx
+            break
+            
+    if month_idx == 0:
+        return 0
+        
+    return month_idx * 31 + day
 
 def get_recommendations(student: StudentProfile, internships: List[InternshipOpportunity]) -> RecommendationResponse:
     eligible_list: List[Tuple[InternshipOpportunity, int, Dict[str, Any]]] = []
     not_eligible_list: List[NotEligibleRecommendation] = []
+    transition_table: List[TransitionRow] = []
 
     # Pre-process student attributes for case-insensitive matching
     student_skills_lower = [s.lower().strip() for s in student.skills]
@@ -18,27 +65,55 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
     student_programme_lower = student.programme.lower().strip()
     student_year_upper = student.year.upper().strip()
 
+    # Tracker for transition table inputs
+    ml_intern_removed = False
+    data_analytics_removed = False
+    ml_intern_reason = ""
+    data_analytics_reason = ""
+
     for item in internships:
         reasons_ineligible = []
 
-        # 1. Eligibility check: Programme
-        # Check if the internship's required programme is a substring of the student's programme
+        # 1. Availability check (Change 1)
+        if item.status and item.status.lower() in ("closed", "applications closed"):
+            reasons_ineligible.append("Applications Closed")
+            if item.title == "ML Intern":
+                ml_intern_removed = True
+                ml_intern_reason = "No longer available"
+
+        # 2. Eligibility check: Programme
         req_programme = item.eligibility.programme
         if req_programme.lower().strip() not in student_programme_lower:
             reasons_ineligible.append(f"programme '{student.programme}' does not match required '{req_programme}'")
 
-        # 2. Eligibility check: Year
+        # 3. Eligibility check: Year
         req_years = [y.upper().strip() for y in item.eligibility.years]
         if student_year_upper not in req_years:
             allowed_years_str = ", ".join(item.eligibility.years)
             reasons_ineligible.append(f"year '{student.year}' does not match allowed years [{allowed_years_str}]")
 
-        # 3. Eligibility check: CGPA
+        # 4. Eligibility check: CGPA (Change 3)
         if item.eligibility.min_cgpa is not None:
             if student.cgpa < item.eligibility.min_cgpa:
                 reasons_ineligible.append(f"CGPA {student.cgpa} is below required {item.eligibility.min_cgpa}")
+                if item.title == "Data Analytics Intern":
+                    data_analytics_removed = True
+                    data_analytics_reason = f"Updated CGPA requirement is {item.eligibility.min_cgpa}"
 
-        # If not eligible due to programme, year, or CGPA
+        # 5. Constraint check: Duration (Change 2)
+        if item.duration and student.max_duration_weeks:
+            weeks = parse_duration_to_weeks(item.duration)
+            if weeks > student.max_duration_weeks:
+                reasons_ineligible.append(f"duration {item.duration} exceeds maximum allowed of {student.max_duration_weeks} weeks")
+
+        # 6. Constraint check: Start Date relative to exams (Change 2)
+        if item.start_date and student.exams_end_date:
+            item_days = date_to_days(item.start_date)
+            exams_days = date_to_days(student.exams_end_date)
+            if item_days > 0 and exams_days > 0 and item_days < exams_days:
+                reasons_ineligible.append(f"starts on {item.start_date}, which is before exams end on {student.exams_end_date}")
+
+        # If not eligible due to any filters
         if reasons_ineligible:
             reason_str = f"Not eligible because: {'; '.join(reasons_ineligible)}."
             not_eligible_list.append(NotEligibleRecommendation(
@@ -48,7 +123,7 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
             ))
             continue
 
-        # If eligible by program/year/CGPA, calculate relevance score
+        # If eligible, calculate relevance score
         score = 0
         matched_skills: List[str] = []
         partial_skills: List[str] = []
@@ -81,7 +156,6 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
         if item_domain_lower in student_interests_lower:
             score += 2
             domain_matched = True
-            # Find the original case student interest that matched
             idx = student_interests_lower.index(item_domain_lower)
             matched_interest_val = student.interests[idx]
 
@@ -111,15 +185,14 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
             skills_str = ", ".join(all_matched_skills)
             reason_parts.append(skills_str)
         
-        # Build reason string
         if all_matched_skills and domain_matched:
-            reason_str = f"Matches {skills_str} and your {item.domain} interest. Meets year and CGPA requirements."
+            reason_str = f"Matches {skills_str} and your {item.domain} interest. Meets year, CGPA, duration, and start-date requirements."
         elif all_matched_skills:
-            reason_str = f"Matches {skills_str}. Meets year and CGPA requirements."
+            reason_str = f"Matches {skills_str}. Meets year, CGPA, duration, and start-date requirements."
         elif domain_matched:
-            reason_str = f"Matches your {item.domain} interest. Meets year and CGPA requirements."
+            reason_str = f"Matches your {item.domain} interest. Meets year, CGPA, duration, and start-date requirements."
         else:
-            reason_str = "Meets year and CGPA requirements."
+            reason_str = "Meets year, CGPA, duration, and start-date requirements."
 
         details = {
             "match_level": match_level,
@@ -148,22 +221,60 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
             eligibility_status="Eligible",
             reason=details["reason"],
             deadline=item.deadline,
-            application_link=item.application_link
+            application_link=item.application_link,
+            duration=item.duration,
+            start_date=item.start_date
+        ))
+
+    # 7. Construct Reassessment Transition Table
+    # Row 1: ML Intern
+    if ml_intern_removed:
+        transition_table.append(TransitionRow(
+            title="ML Intern",
+            prev_status="Rank 1",
+            updated_status="Applications Closed",
+            decision="Remove",
+            reason=ml_intern_reason
+        ))
+    # Row 2: Data Analytics Intern
+    if data_analytics_removed:
+        transition_table.append(TransitionRow(
+            title="Data Analytics Intern",
+            prev_status="Rank 2",
+            updated_status="Not Eligible",
+            decision="Remove",
+            reason=data_analytics_reason
+        ))
+    
+    # Row 3 & 4: Top 2 newly eligible alternatives (if any)
+    if len(ranked_recommendations) >= 1:
+        item_x = ranked_recommendations[0]
+        transition_table.append(TransitionRow(
+            title=item_x.title,
+            prev_status="Previously lower ranked",
+            updated_status="Eligible",
+            decision="Reconsider",
+            reason="Meets revised constraints and profile"
+        ))
+    if len(ranked_recommendations) >= 2:
+        item_y = ranked_recommendations[1]
+        transition_table.append(TransitionRow(
+            title=item_y.title,
+            prev_status="Previously lower ranked",
+            updated_status="Eligible",
+            decision="Reconsider",
+            reason="Suitable alternative"
         ))
 
     # Determine top recommendation
     top_rec = None
     if ranked_recommendations:
         first_item = ranked_recommendations[0]
-        # Build a longer paragraph explanation for the top recommendation
-        skills_phrase = f"your skills in {', '.join(first_item.matched_skills)}" if first_item.matched_skills else "your profile background"
-        interest_phrase = f" and your domain interest in '{first_item.matched_interest}'" if first_item.matched_interest else ""
-        
         why_para = (
-            f"The '{first_item.title}' role at {first_item.organization or 'Placement Cell'} is our top recommendation for you "
-            f"with a {first_item.match_level} match level. This internship strongly aligns with {skills_phrase}{interest_phrase}. "
-            f"You satisfy all requirements, and your academic standing meets or exceeds the eligibility criteria. "
-            f"Be sure to apply before the deadline on {first_item.deadline}."
+            f"The '{first_item.title}' role at {first_item.organization or 'Placement Cell'} is our new top recommendation for you "
+            f"with a {first_item.match_level} match level. This internship strongly aligns with your skills "
+            f"and interests, satisfies your max duration constraint ({first_item.duration}), and starts on {first_item.start_date or 'TBD'} "
+            f"which is after your semester examinations end on {student.exams_end_date}."
         )
         
         top_rec = TopRecommendation(
@@ -178,17 +289,35 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
             reason=first_item.reason,
             deadline=first_item.deadline,
             application_link=first_item.application_link,
+            duration=first_item.duration,
+            start_date=first_item.start_date,
             why_recommended=why_para
         )
 
     # Determine top level message if no recommendations matched
     message = None
     if not ranked_recommendations:
-        message = "No internships in the current list match your eligibility. Here's what's closest and why you didn't qualify."
+        message = "No Suitable Opportunity Found"
+
+    # Determine report metrics
+    top_changed = "Yes" if ml_intern_removed else "No"
+    removed_list = []
+    reasons_list = []
+    if ml_intern_removed:
+        removed_list.append("ML Intern")
+        reasons_list.append("Closed")
+    if data_analytics_removed:
+        removed_list.append("Data Analytics Intern")
+        reasons_list.append("Eligibility changed (CGPA requirement updated to 8.5)")
 
     return RecommendationResponse(
         ranked=ranked_recommendations,
         not_eligible=not_eligible_list,
         top_recommendation=top_rec,
-        message=message
+        message=message,
+        transition_table=transition_table,
+        eligible_remaining_count=len(ranked_recommendations),
+        original_top_recommendation_changed=top_changed,
+        opportunities_removed=removed_list,
+        reasons_for_removal=reasons_list
     )

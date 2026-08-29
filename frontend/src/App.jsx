@@ -59,7 +59,9 @@ export default function App() {
           interests: parsedInterests,
           programme: lastFormInput.programme,
           year: simYear,
-          cgpa: parseFloat(simCgpa)
+          cgpa: parseFloat(simCgpa),
+          max_duration_weeks: lastFormInput.max_duration_weeks || 8,
+          exams_end_date: lastFormInput.exams_end_date || "15 Sept"
         };
 
         const data = await getRecommendations(payload);

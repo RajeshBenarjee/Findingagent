@@ -7,6 +7,8 @@ class StudentProfile(BaseModel):
     programme: str
     year: str
     cgpa: float
+    max_duration_weeks: Optional[int] = 8
+    exams_end_date: Optional[str] = "15 Sept"
 
 class EligibilityCriteria(BaseModel):
     programme: str
@@ -22,6 +24,8 @@ class InternshipOpportunity(BaseModel):
     duration: Optional[str] = None
     deadline: str
     application_link: Optional[str] = None
+    status: Optional[str] = "Open"
+    start_date: Optional[str] = None
 
 class RankedRecommendation(BaseModel):
     rank: int
@@ -35,6 +39,8 @@ class RankedRecommendation(BaseModel):
     reason: str
     deadline: str
     application_link: Optional[str] = None
+    duration: Optional[str] = None
+    start_date: Optional[str] = None
 
 class NotEligibleRecommendation(BaseModel):
     title: str
@@ -44,15 +50,26 @@ class NotEligibleRecommendation(BaseModel):
 class TopRecommendation(RankedRecommendation):
     why_recommended: str
 
+class TransitionRow(BaseModel):
+    title: str
+    prev_status: str
+    updated_status: str
+    decision: str
+    reason: str
+
 class RecommendationResponse(BaseModel):
     ranked: List[RankedRecommendation]
     not_eligible: List[NotEligibleRecommendation]
     top_recommendation: Optional[TopRecommendation] = None
     message: Optional[str] = None
+    transition_table: Optional[List[TransitionRow]] = None
+    eligible_remaining_count: Optional[int] = 0
+    original_top_recommendation_changed: Optional[str] = "No"
+    opportunities_removed: Optional[List[str]] = []
+    reasons_for_removal: Optional[List[str]] = []
 
 class EmailAlertRequest(BaseModel):
     email: str
     title: str
     deadline: str
     organization: str
-

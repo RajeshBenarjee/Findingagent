@@ -9,9 +9,11 @@
       "years": ["III", "IV"],
       "min_cgpa": 7.5
     },
-    "duration": null,
+    "duration": "8 weeks",
     "deadline": "10 Sept",
-    "application_link": null
+    "application_link": null,
+    "status": "Closed",
+    "start_date": "12 Sept"
   },
   {
     "title": "Web Developer Intern",
@@ -23,9 +25,11 @@
       "years": ["II", "III"],
       "min_cgpa": null
     },
-    "duration": null,
+    "duration": "12 weeks",
     "deadline": "12 Sept",
-    "application_link": null
+    "application_link": null,
+    "status": "Open",
+    "start_date": "20 Sept"
   },
   {
     "title": "Data Analytics Intern",
@@ -35,11 +39,13 @@
     "eligibility": {
       "programme": "B.Tech",
       "years": ["III", "IV"],
-      "min_cgpa": 7.0
+      "min_cgpa": 8.5
     },
-    "duration": null,
+    "duration": "8 weeks",
     "deadline": "15 Sept",
-    "application_link": null
+    "application_link": null,
+    "status": "Open",
+    "start_date": "20 Sept"
   },
   {
     "title": "Cloud Intern",
@@ -51,9 +57,43 @@
       "years": ["III", "IV"],
       "min_cgpa": null
     },
-    "duration": null,
+    "duration": "8 weeks",
     "deadline": "18 Sept",
-    "application_link": null
+    "application_link": null,
+    "status": "Open",
+    "start_date": "10 Sept"
+  },
+  {
+    "title": "Python Developer Intern",
+    "organization": "PyCode Solutions",
+    "domain": "Web Development",
+    "required_skills": ["Python", "Git", "SQL"],
+    "eligibility": {
+      "programme": "B.Tech",
+      "years": ["II", "III"],
+      "min_cgpa": 7.0
+    },
+    "duration": "8 weeks",
+    "deadline": "29 Sept",
+    "application_link": null,
+    "status": "Open",
+    "start_date": "20 Sept"
+  },
+  {
+    "title": "UI/UX Design Intern",
+    "organization": "CreativeFlow Labs",
+    "domain": "UI/UX Design",
+    "required_skills": ["Figma", "Adobe XD", "Wireframing"],
+    "eligibility": {
+      "programme": "B.Tech",
+      "years": ["II", "III"],
+      "min_cgpa": null
+    },
+    "duration": "6 weeks",
+    "deadline": "19 Sept",
+    "application_link": null,
+    "status": "Open",
+    "start_date": "18 Sept"
   },
   {
     "title": "Deep Learning Specialist Intern",
@@ -67,21 +107,9 @@
     },
     "duration": "6 Months",
     "deadline": "20 Sept",
-    "application_link": "https://neurocore.ai/careers/intern"
-  },
-  {
-    "title": "React Frontend Developer Intern",
-    "organization": "PixelPerfect Studios",
-    "domain": "Web Development",
-    "required_skills": ["JavaScript", "React", "CSS"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III", "IV"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "22 Sept",
-    "application_link": null
+    "application_link": "https://neurocore.ai/careers/intern",
+    "status": "Open",
+    "start_date": "22 Sept"
   },
   {
     "title": "DevOps Engineer Intern",
@@ -95,63 +123,9 @@
     },
     "duration": "6 Months",
     "deadline": "25 Sept",
-    "application_link": "https://cloudscale.com/intern-devops"
-  },
-  {
-    "title": "NLP Research Intern",
-    "organization": "Lexicon Language Systems",
-    "domain": "AI/ML",
-    "required_skills": ["Python", "NLP", "Transformers"],
-    "eligibility": {
-      "programme": "M.Tech",
-      "years": ["I", "II"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "12 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Data Science Associate Intern",
-    "organization": "DataPulse Analytics",
-    "domain": "Data Science",
-    "required_skills": ["Python", "R", "SQL", "Tableau"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.5
-    },
-    "duration": "4 Months",
-    "deadline": "14 Sept",
-    "application_link": "https://datapulse.co/careers/interns"
-  },
-  {
-    "title": "Cybersecurity Analyst Intern",
-    "organization": "CyberGuard Networks",
-    "domain": "Cyber Security",
-    "required_skills": ["Linux", "Wireshark", "Network Security"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "28 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Node.js Backend Developer Intern",
-    "organization": "APIForge Technologies",
-    "domain": "Web Development",
-    "required_skills": ["JavaScript", "Node.js", "Express", "SQL"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "30 Sept",
-    "application_link": "https://apiforge.io/join-us"
+    "application_link": "https://cloudscale.com/intern-devops",
+    "status": "Open",
+    "start_date": "25 Sept"
   },
   {
     "title": "iOS Developer Intern",
@@ -165,7 +139,9 @@
     },
     "duration": "3 Months",
     "deadline": "15 Sept",
-    "application_link": null
+    "application_link": null,
+    "status": "Open",
+    "start_date": "15 Sept"
   },
   {
     "title": "Android Developer Intern",
@@ -179,524 +155,8 @@
     },
     "duration": "3 Months",
     "deadline": "17 Sept",
-    "application_link": "https://droidcraft.com/careers"
-  },
-  {
-    "title": "UI/UX Design Intern",
-    "organization": "CreativeFlow Labs",
-    "domain": "UI/UX Design",
-    "required_skills": ["Figma", "Adobe XD", "Wireframing"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III"],
-      "min_cgpa": null
-    },
-    "duration": "2 Months",
-    "deadline": "19 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Big Data Engineer Intern",
-    "organization": "InfoStream Solutions",
-    "domain": "Data Science",
-    "required_skills": ["Python", "Spark", "Hadoop"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "24 Sept",
-    "application_link": "https://infostream.net/internships"
-  },
-  {
-    "title": "Database Administrator Intern",
-    "organization": "SecureData Corp",
-    "domain": "Database Management",
-    "required_skills": ["SQL", "Linux", "Oracle"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "26 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Computer Vision Intern",
-    "organization": "VisionMetrics Inc",
-    "domain": "AI/ML",
-    "required_skills": ["Python", "OpenCV", "Machine Learning"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "29 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Azure Cloud Developer Intern",
-    "organization": "SkyHigh Enterprise",
-    "domain": "Cloud Computing",
-    "required_skills": ["Azure", "C#", "Linux"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.5
-    },
-    "duration": "4 Months",
-    "deadline": "21 Sept",
-    "application_link": "https://skyhigh.com/careers/intern"
-  },
-  {
-    "title": "Full-Stack Web Intern",
-    "organization": "SaaSFactory Labs",
-    "domain": "Web Development",
-    "required_skills": ["JavaScript", "React", "Node.js", "MongoDB"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III", "IV"],
-      "min_cgpa": 7.5
-    },
-    "duration": "6 Months",
-    "deadline": "23 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Data Analyst Intern (Healthcare)",
-    "organization": "MediData Systems",
-    "domain": "Data Science",
-    "required_skills": ["Python", "SQL", "Excel"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "14 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Penetration Tester Intern",
-    "organization": "WhiteHat Hackers",
-    "domain": "Cyber Security",
-    "required_skills": ["Linux", "Metasploit", "Python"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.2
-    },
-    "duration": "6 Months",
-    "deadline": "27 Sept",
-    "application_link": "https://whitehathackers.org/apply-intern"
-  },
-  {
-    "title": "Kubernetes Orchestration Intern",
-    "organization": "KubeStack Solutions",
-    "domain": "Cloud Computing",
-    "required_skills": ["Docker", "Kubernetes", "Linux"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "30 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Product Management Intern",
-    "organization": "InnoVentures Group",
-    "domain": "Product Management",
-    "required_skills": ["Product Strategy", "Figma", "Excel"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "3 Months",
-    "deadline": "18 Sept",
-    "application_link": "https://innoventures.io/interns"
-  },
-  {
-    "title": "Flutter Cross-Platform Intern",
-    "organization": "MultiPlatform Tech",
-    "domain": "Mobile Development",
-    "required_skills": ["Flutter", "Dart", "Git"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "16 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Business Intelligence Intern",
-    "organization": "FinStat Financials",
-    "domain": "Data Science",
-    "required_skills": ["SQL", "PowerBI", "Excel"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.2
-    },
-    "duration": "3 Months",
-    "deadline": "19 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Reinforcement Learning Intern",
-    "organization": "RoboMotion Intellect",
-    "domain": "AI/ML",
-    "required_skills": ["Python", "Reinforcement Learning", "PyTorch"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["IV"],
-      "min_cgpa": 8.8
-    },
-    "duration": "6 Months",
-    "deadline": "13 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Linux Kernel Intern",
-    "organization": "CoreKernel Technologies",
-    "domain": "Cloud Computing",
-    "required_skills": ["C", "Linux", "Git"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "11 Sept",
-    "application_link": "https://corekernel.org/careers/intern"
-  },
-  {
-    "title": "VueJS Frontend Intern",
-    "organization": "ModernWeb Agency",
-    "domain": "Web Development",
-    "required_skills": ["JavaScript", "Vue", "HTML", "CSS"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III"],
-      "min_cgpa": null
-    },
-    "duration": "3 Months",
-    "deadline": "24 Sept",
-    "application_link": null
-  },
-  {
-    "title": "AWS Architect Intern",
-    "organization": "SaaSify Cloud",
-    "domain": "Cloud Computing",
-    "required_skills": ["AWS", "Terraform", "Docker"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.8
-    },
-    "duration": "6 Months",
-    "deadline": "26 Sept",
-    "application_link": "https://saasify.cloud/careers"
-  },
-  {
-    "title": "Data Visualization Expert Intern",
-    "organization": "InfoGraphics Design",
-    "domain": "Data Science",
-    "required_skills": ["Python", "D3.js", "Tableau"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III", "IV"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "28 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Threat Intelligence Intern",
-    "organization": "SecureGuard Cyber",
-    "domain": "Cyber Security",
-    "required_skills": ["Linux", "Wireshark", "Python"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "30 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Django Backend Intern",
-    "organization": "WebCraft Systems",
-    "domain": "Web Development",
-    "required_skills": ["Python", "Django", "SQL"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.4
-    },
-    "duration": "3 Months",
-    "deadline": "22 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Embedded Systems Intern",
-    "organization": "MicroPulse Hardware",
-    "domain": "IoT/Embedded",
-    "required_skills": ["C", "Microcontrollers", "Linux"],
-    "eligibility": {
-      "programme": "B.Tech ECE",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.5
-    },
-    "duration": "6 Months",
-    "deadline": "25 Sept",
-    "application_link": null
-  },
-  {
-    "title": "AI Product Owner Intern",
-    "organization": "NextGen AI Group",
-    "domain": "Product Management",
-    "required_skills": ["Product Strategy", "Machine Learning", "Excel"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["IV"],
-      "min_cgpa": 8.2
-    },
-    "duration": "6 Months",
-    "deadline": "27 Sept",
-    "application_link": null
-  },
-  {
-    "title": "React Native Mobile Intern",
-    "organization": "AppCraft Studio",
-    "domain": "Mobile Development",
-    "required_skills": ["JavaScript", "React Native", "CSS"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III", "IV"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "12 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Quantitative Finance Analyst Intern",
-    "organization": "WallStreet Algorithmic",
-    "domain": "Data Science",
-    "required_skills": ["Python", "Statistics", "SQL"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 9.0
-    },
-    "duration": "6 Months",
-    "deadline": "14 Sept",
-    "application_link": "https://wallstreetalgo.com/internships"
-  },
-  {
-    "title": "Information Security Intern",
-    "organization": "SafePass Systems",
-    "domain": "Cyber Security",
-    "required_skills": ["Linux", "Cryptography", "Network Security"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "17 Sept",
-    "application_link": null
-  },
-  {
-    "title": "GraphQL API Intern",
-    "organization": "ConnectLink Enterprise",
-    "domain": "Web Development",
-    "required_skills": ["JavaScript", "Node.js", "GraphQL"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III"],
-      "min_cgpa": 7.5
-    },
-    "duration": "3 Months",
-    "deadline": "19 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Kubernetes Operator Developer Intern",
-    "organization": "CloudNative Systems",
-    "domain": "Cloud Computing",
-    "required_skills": ["Go", "Kubernetes", "Docker", "Linux"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.5
-    },
-    "duration": "6 Months",
-    "deadline": "24 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Computer Vision Scientist Intern",
-    "organization": "OmniVision AI",
-    "domain": "AI/ML",
-    "required_skills": ["Python", "OpenCV", "Deep Learning"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.2
-    },
-    "duration": "6 Months",
-    "deadline": "26 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Angular Web Developer Intern",
-    "organization": "SpeedCode Solutions",
-    "domain": "Web Development",
-    "required_skills": ["JavaScript", "Angular", "HTML", "CSS"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "28 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Financial Data Analyst Intern",
-    "organization": "Apex Analytics Group",
-    "domain": "Data Science",
-    "required_skills": ["Python", "SQL", "Excel", "R"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.5
-    },
-    "duration": "3 Months",
-    "deadline": "30 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Network Security Specialist Intern",
-    "organization": "NetDefense Group",
-    "domain": "Cyber Security",
-    "required_skills": ["Wireshark", "Network Security", "Linux"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["III", "IV"],
-      "min_cgpa": 7.8
-    },
-    "duration": "4 Months",
-    "deadline": "21 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Mobile App UI Designer Intern",
-    "organization": "VisualDesign Labs",
-    "domain": "UI/UX Design",
-    "required_skills": ["Figma", "Sketch", "Wireframing"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III"],
-      "min_cgpa": null
-    },
-    "duration": "3 Months",
-    "deadline": "23 Sept",
-    "application_link": null
-  },
-  {
-    "title": "AWS Cloud Security Intern",
-    "organization": "GuardCloud Technologies",
-    "domain": "Cloud Computing",
-    "required_skills": ["AWS", "Linux", "Network Security"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "25 Sept",
-    "application_link": null
-  },
-  {
-    "title": "MLOps Pipelines Intern",
-    "organization": "NeuralPipeline Corp",
-    "domain": "AI/ML",
-    "required_skills": ["Python", "Docker", "Machine Learning"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.0
-    },
-    "duration": "6 Months",
-    "deadline": "27 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Python Developer Intern",
-    "organization": "PyCode Solutions",
-    "domain": "Web Development",
-    "required_skills": ["Python", "Git", "SQL"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III"],
-      "min_cgpa": 7.0
-    },
-    "duration": "3 Months",
-    "deadline": "29 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Statistical Analyst Intern",
-    "organization": "StatMetrics Group",
-    "domain": "Data Science",
-    "required_skills": ["Python", "R", "Statistics"],
-    "eligibility": {
-      "programme": "B.Tech",
-      "years": ["II", "III", "IV"],
-      "min_cgpa": 7.5
-    },
-    "duration": "3 Months",
-    "deadline": "12 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Site Reliability Engineer Intern",
-    "organization": "SiteReliable Inc",
-    "domain": "Cloud Computing",
-    "required_skills": ["Linux", "Kubernetes", "Docker", "AWS"],
-    "eligibility": {
-      "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
-      "min_cgpa": 8.2
-    },
-    "duration": "6 Months",
-    "deadline": "14 Sept",
-    "application_link": null
-  },
-  {
-    "title": "Generative AI Research Intern",
-    "organization": "GenPulse Artificial Intelligence",
-    "domain": "AI/ML",
-    "required_skills": ["Python", "PyTorch", "Transformers", "Deep Learning"],
-    "eligibility": {
-      "programme": "M.Tech",
-      "years": ["I", "II"],
-      "min_cgpa": 8.5
-    },
-    "duration": "6 Months",
-    "deadline": "16 Sept",
-    "application_link": "https://genpulse.ai/internships"
+    "application_link": "https://droidcraft.com/careers",
+    "status": "Open",
+    "start_date": "18 Sept"
   }
 ]

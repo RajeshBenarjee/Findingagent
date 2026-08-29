@@ -83,7 +83,17 @@ const DEFAULT_QUESTIONS = [
 export default function ResultsList({ results, onTrackOpportunity }) {
   if (!results) return null;
 
-  const { ranked, not_eligible, top_recommendation, message } = results;
+  const { 
+    ranked, 
+    not_eligible, 
+    top_recommendation, 
+    message, 
+    transition_table, 
+    eligible_remaining_count,
+    original_top_recommendation_changed,
+    opportunities_removed,
+    reasons_for_removal
+  } = results;
 
   // State for skills gap toggles
   const [expandedGap, setExpandedGap] = useState({});
@@ -196,6 +206,74 @@ export default function ResultsList({ results, onTrackOpportunity }) {
 
   return (
     <div className="results-container">
+      {/* Reassessment Transition Table */}
+      {transition_table && transition_table.length > 0 && (
+        <div className="reassessment-panel">
+          <h3>🔄 Shortlist Reassessment & Adaptability</h3>
+          <p className="reassessment-subtitle">
+            Changes detected in internship status, academic criteria, and constraints.
+          </p>
+
+          {/* Summary Dashboard Cards */}
+          <div className="reassessment-summary-grid">
+            <div className="summary-card">
+              <span className="summary-title">Opportunities Removed</span>
+              <span className="summary-value">
+                {opportunities_removed && opportunities_removed.length > 0 
+                  ? opportunities_removed.join(', ') 
+                  : 'None'}
+              </span>
+            </div>
+            <div className="summary-card">
+              <span className="summary-title">Reason for Removal</span>
+              <span className="summary-value">
+                {reasons_for_removal && reasons_for_removal.length > 0 
+                  ? reasons_for_removal.join(' / ') 
+                  : 'N/A'}
+              </span>
+            </div>
+            <div className="summary-card">
+              <span className="summary-title">Eligible Remaining</span>
+              <span className="summary-value highlight-blue">{eligible_remaining_count}</span>
+            </div>
+            <div className="summary-card">
+              <span className="summary-title">Original Top Changed?</span>
+              <span className={`summary-value ${original_top_recommendation_changed === 'Yes' ? 'val-yes' : 'val-no'}`}>
+                {original_top_recommendation_changed}
+              </span>
+            </div>
+          </div>
+
+          <div className="table-responsive">
+            <table className="reassessment-table">
+              <thead>
+                <tr>
+                  <th>Internship</th>
+                  <th>Previous Status</th>
+                  <th>Updated Status</th>
+                  <th>Decision</th>
+                  <th>Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {transition_table.map((row, idx) => (
+                  <tr key={idx} className={`row-decision-${row.decision.toLowerCase()}`}>
+                    <td><strong>{row.title}</strong></td>
+                    <td><span className="status-pill status-prev">{row.prev_status}</span></td>
+                    <td><span className={`status-pill status-updated-${row.updated_status.toLowerCase().replace(/ /g, '-')}`}>{row.updated_status}</span></td>
+                    <td><span className={`decision-pill decision-${row.decision.toLowerCase()}`}>{row.decision}</span></td>
+                    <td className="reason-cell">{row.reason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="remaining-count-alert">
+            ℹ️ <strong>{eligible_remaining_count}</strong> eligible opportunities remaining.
+          </div>
+        </div>
+      )}
+
       {/* Top Recommendation Highlight Card */}
       {top_recommendation && (
         <div className="top-recommendation-card">
@@ -251,6 +329,47 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                 </div>
               </div>
             )}
+          </div>
+
+          {/* Revised Application Plan Box */}
+          <div className="revised-application-plan">
+            <h3>📋 Revised Application Plan</h3>
+            <div className="plan-grid">
+              <div className="plan-item">
+                <strong>New Top Recommendation:</strong>
+                <span className="plan-val-title">⭐ {top_recommendation.title}</span>
+              </div>
+              <div className="plan-item">
+                <strong>Why:</strong>
+                <span>Meets eligibility, skill/interest match, duration ({top_recommendation.duration}), and starts after exams (starts {top_recommendation.start_date}).</span>
+              </div>
+              <div className="plan-item">
+                <strong>Application Priority:</strong>
+                <span className="priority-badge priority-high">🔥 High Priority</span>
+              </div>
+              <div className="plan-item">
+                <strong>Application Deadline:</strong>
+                <span>{top_recommendation.deadline}</span>
+              </div>
+              <div className="plan-item">
+                <strong>Missing Preferred Skills:</strong>
+                <span>
+                  {top_recommendation.missing_preferred_skills.length > 0 
+                    ? top_recommendation.missing_preferred_skills.join(', ') 
+                    : 'None! Perfect skills match.'}
+                </span>
+              </div>
+              <div className="plan-item">
+                <strong>Next Step:</strong>
+                <span>
+                  {top_recommendation.application_link ? (
+                    <>Click the <strong>Apply Online</strong> link below to submit your application on the portal.</>
+                  ) : (
+                    <>Submit your updated resume to the Placement Cell coordinator before the deadline on <strong>{top_recommendation.deadline}</strong>.</>
+                  )}
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Interactive Mock Interview & Gap Analyzer Buttons */}
