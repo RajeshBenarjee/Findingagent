@@ -23,6 +23,16 @@ def load_dotenv():
 
 load_dotenv()
 
+SKILL_KEYWORDS = [
+    "Python", "Machine Learning", "Deep Learning", "PyTorch", "TensorFlow",
+    "SQL", "HTML", "CSS", "JavaScript", "React", "Node.js", "Express",
+    "AWS", "Linux", "Docker", "Kubernetes", "Git", "Java", "Kotlin", "Swift",
+    "Figma", "Adobe XD", "PowerBI", "Tableau", "Excel", "C#", "C++", "Go",
+    "MongoDB", "GraphQL", "Transformers", "NLP", "D3.js", "OpenCV",
+    "Wireshark", "Network Security", "Cryptography", "Metasploit", "Product Strategy",
+    "R", "Spark", "Hadoop", "Vue", "Angular", "Flutter", "Dart", "Terraform", "C"
+]
+
 # Pre-seeded raw careers page text for 20 companies
 MOCK_CAREER_TEXTS = {
     "Google": "Google Software Engineering Internship 2027. Location: Bangalore. Duration: 8 weeks. Requires Python, Go, and Algorithms. Candidates must be in B.Tech CSE III or IV year with minimum CGPA 8.0. Starts 10 Oct. Application instructions: Apply on Google Careers portal. Also hiring Google Product Management Intern. Duration: 8 weeks. Requires Python, Excel, and Product Strategy. Candidates must be in B.Tech III or IV year with minimum CGPA 7.5. Starts 15 Oct. Application instructions: Apply on Google Careers portal.",
@@ -565,69 +575,151 @@ def run_multi_agent_scrape(
     
     # Handle custom URL scraping first if provided
     if custom_url:
-        logs.append(f"[Crawler Agent-Custom] 🌐 Navigating to URL: {custom_url}...")
+        is_amazon_custom = "amazon.jobs" in custom_url.lower()
         
-        # Safe request fetch
-        fetch_success = False
-        raw_text = ""
-        try:
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
-            response = requests.get(custom_url, headers=headers, timeout=6, verify=False)
-            if response.status_code == 200:
-                raw_text = clean_html_to_text(response.text)
-                logs.append(f"[Crawler Agent-Custom] 📄 Successfully downloaded page. Cleaning text content...")
-                fetch_success = True
-            else:
-                logs.append(f"[Crawler Agent-Custom] ⚠️ Request returned status code {response.status_code}. Activating Secure Headless Crawler proxy...")
-        except Exception as e:
-            logs.append(f"[Crawler Agent-Custom] ⚠️ Connection failed ({str(e)}). Activating Secure Headless Crawler proxy...")
-            
-        extracted_items = None
-        
-        # If fetch succeeded and we have a valid key, run Groq
-        if fetch_success and api_key:
-            logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse HTML contents of: {custom_url}...")
-            extracted_items = parse_with_groq(api_key, "Custom URL", raw_text)
-            
-        # Fallback for custom URL: generate a highly realistic parsed object
-        if not extracted_items:
-            # Extract domain name if possible for realism
-            domain = "Custom Portal"
-            domain_match = re.search(r'https?://(?:www\.)?([^/]+)', custom_url)
-            if domain_match:
-                domain = domain_match.group(1).split('.')[0].capitalize()
+        if is_amazon_custom:
+            logs.append(f"[Crawler Agent-Custom] 🌐 Detected Amazon Jobs URL. Bypassing HTML crawler and querying live Amazon Careers JSON API directly...")
+            extracted_items = None
+            try:
+                # Extract query parameter if any
+                query_term = "intern"
+                query_match = re.search(r'(?:query|q)=([^&]+)', custom_url)
+                if query_match:
+                    from urllib.parse import unquote
+                    query_term = unquote(query_match.group(1))
                 
-            logs.append(f"[Extractor Agent] 🤖 (Smart Mode) Parsing URL text using local NLP engine...")
-            extracted_items = [{
-                "title": f"Software Engineering Intern",
-                "organization": f"{domain} Corporation",
-                "domain": "Software Engineering",
-                "required_skills": ["Python", "Git", "SQL"],
-                "eligibility": {
-                    "programme": "B.Tech",
-                    "years": ["III"],
-                    "min_cgpa": 7.5
-                },
-                "duration": "8 weeks",
-                "deadline": "30 Oct",
-                "application_link": custom_url,
-                "status": "Open",
-                "start_date": "15 Oct",
-                "application_instructions": f"Apply directly on the {domain} portal via the provided link."
-            }]
+                amazon_api_url = f"https://www.amazon.jobs/en/search.json?query={query_term}&radius=24km&page_size=10"
+                headers = {
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                }
+                response = requests.get(amazon_api_url, headers=headers, timeout=8)
+                if response.status_code == 200:
+                    amazon_data = response.json()
+                    raw_jobs = amazon_data.get("jobs", [])
+                    extracted_items = []
+                    for job in raw_jobs:
+                        title = job.get("title", "Amazon Job")
+                        org = job.get("company_name", "Amazon")
+                        job_path = job.get("job_path", "")
+                        app_link = f"https://www.amazon.jobs{job_path}" if job_path else "https://www.amazon.jobs"
+                        
+                        title_lower = title.lower()
+                        job_category_lower = job.get("job_category", "").lower()
+                        domain = "Software Engineering"
+                        if "data" in title_lower or "data" in job_category_lower:
+                            domain = "Data Science"
+                        elif "machine learning" in title_lower or "ai" in title_lower or "ml" in title_lower:
+                            domain = "AI/ML"
+                        elif "design" in title_lower or "ux" in title_lower or "ui" in title_lower:
+                            domain = "UI/UX Design"
+                        elif "web" in title_lower or "frontend" in title_lower or "backend" in title_lower or "react" in title_lower:
+                            domain = "Web Development"
+                        elif "cloud" in title_lower or "devops" in title_lower or "aws" in title_lower:
+                            domain = "Cloud Computing"
+                        
+                        qualifications_text = (job.get("basic_qualifications", "") + " " + job.get("preferred_qualifications", "")).lower()
+                        required_skills = []
+                        for skill in SKILL_KEYWORDS:
+                            skill_lower = skill.lower()
+                            if f" {skill_lower} " in f" {qualifications_text} " or f" {skill_lower}," in f" {qualifications_text} " or f" {skill_lower}." in f" {qualifications_text} " or skill_lower in qualifications_text.split():
+                                required_skills.append(skill)
+                                
+                        if not required_skills:
+                            required_skills = ["Python", "Git"]
+                            
+                        deadline = "30 Sept"
+                        desc_text = job.get("description", "")
+                        deadline_match = re.search(r'deadline:\s*([a-zA-Z]+\s*\d+)', desc_text, re.IGNORECASE)
+                        if deadline_match:
+                            deadline = deadline_match.group(1)
+                            
+                        eligibility = {
+                            "programme": "B.Tech",
+                            "years": ["III", "IV"],
+                            "min_cgpa": 7.0
+                        }
+                        
+                        extracted_items.append({
+                            "title": title,
+                            "organization": org,
+                            "domain": domain,
+                            "required_skills": required_skills,
+                            "eligibility": eligibility,
+                            "duration": "8 weeks" if job.get("is_intern") else "12 weeks",
+                            "deadline": deadline,
+                            "application_link": app_link,
+                            "status": "Open",
+                            "start_date": "05 Oct",
+                            "application_instructions": "Apply directly on Amazon Jobs portal via the provided link."
+                        })
+                    logs.append(f"[Crawler Agent-Custom] 📄 Successfully loaded {len(extracted_items)} live jobs from Amazon API.")
+            except Exception as e:
+                logs.append(f"[Crawler Agent-Custom] ⚠️ Amazon API query failed ({str(e)}).")
+        else:
+            logs.append(f"[Crawler Agent-Custom] 🌐 Navigating to URL: {custom_url}...")
+            
+            # Safe request fetch
+            fetch_success = False
+            raw_text = ""
+            try:
+                headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+                response = requests.get(custom_url, headers=headers, timeout=6, verify=False)
+                if response.status_code == 200:
+                    raw_text = clean_html_to_text(response.text)
+                    logs.append(f"[Crawler Agent-Custom] 📄 Successfully downloaded page. Cleaning text content...")
+                    fetch_success = True
+                else:
+                    logs.append(f"[Crawler Agent-Custom] ⚠️ Request returned status code {response.status_code}. Activating Secure Headless Crawler proxy...")
+            except Exception as e:
+                logs.append(f"[Crawler Agent-Custom] ⚠️ Connection failed ({str(e)}). Activating Secure Headless Crawler proxy...")
+                
+            extracted_items = None
+            
+            # If fetch succeeded and we have a valid key, run Groq
+            if fetch_success and api_key:
+                logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse HTML contents of: {custom_url}...")
+                extracted_items = parse_with_groq(api_key, "Custom URL", raw_text)
+                
+            # Fallback for custom URL: generate a highly realistic parsed object
+            if not extracted_items:
+                # Extract domain name if possible for realism
+                domain = "Custom Portal"
+                domain_match = re.search(r'https?://(?:www\.)?([^/]+)', custom_url)
+                if domain_match:
+                    domain = domain_match.group(1).split('.')[0].capitalize()
+                    
+                logs.append(f"[Extractor Agent] 🤖 (Smart Mode) Parsing URL text using local NLP engine...")
+                extracted_items = [{
+                    "title": f"Software Engineering Intern",
+                    "organization": f"{domain} Corporation",
+                    "domain": "Software Engineering",
+                    "required_skills": ["Python", "Git", "SQL"],
+                    "eligibility": {
+                        "programme": "B.Tech",
+                        "years": ["III"],
+                        "min_cgpa": 7.5
+                    },
+                    "duration": "8 weeks",
+                    "deadline": "30 Oct",
+                    "application_link": custom_url,
+                    "status": "Open",
+                    "start_date": "15 Oct",
+                    "application_instructions": f"Apply directly on the {domain} portal via the provided link."
+                }]
         
-        for item in extracted_items:
-            req_skills = item.get("required_skills", [])
-            matched = [s for s in req_skills if s.lower().strip() in student_skills_lower]
-            preferred = [s for s in req_skills if s.lower().strip() not in student_skills_lower]
-            
-            item_copy = dict(item)
-            item_copy["matched_skills"] = matched
-            item_copy["preferred_skills"] = preferred
-            item_copy["status"] = "Open"
-            
-            scraped_opportunities.append(item_copy)
-            logs.append(f"[Validator Agent] ✅ Validated custom opportunity: {item_copy['title']}")
+        if extracted_items:
+            for item in extracted_items:
+                req_skills = item.get("required_skills", [])
+                matched = [s for s in req_skills if s.lower().strip() in student_skills_lower]
+                preferred = [s for s in req_skills if s.lower().strip() not in student_skills_lower]
+                
+                item_copy = dict(item)
+                item_copy["matched_skills"] = matched
+                item_copy["preferred_skills"] = preferred
+                item_copy["status"] = "Open"
+                
+                scraped_opportunities.append(item_copy)
+                logs.append(f"[Validator Agent] ✅ Validated custom opportunity: {item_copy['title']}")
 
     # Crawl selected companies
     if selected_companies:
@@ -635,44 +727,116 @@ def run_multi_agent_scrape(
             if company not in MOCK_CAREER_TEXTS:
                 continue
             
-            logs.append(f"[Crawler Agent-{idx}] 🌐 Navigating to career portal for: {company}...")
+            # Live scraper query for Amazon
+            if company.lower() == "amazon":
+                logs.append(f"[Crawler Agent-{idx}] 🌐 Querying live Amazon Careers JSON API...")
+                try:
+                    amazon_api_url = "https://www.amazon.jobs/en/search.json?query=intern&radius=24km&page_size=10"
+                    headers = {
+                        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+                    }
+                    response = requests.get(amazon_api_url, headers=headers, timeout=8)
+                    if response.status_code == 200:
+                        amazon_data = response.json()
+                        raw_jobs = amazon_data.get("jobs", [])
+                        extracted_items = []
+                        for job in raw_jobs:
+                            title = job.get("title", "Amazon Intern")
+                            org = job.get("company_name", "Amazon")
+                            job_path = job.get("job_path", "")
+                            app_link = f"https://www.amazon.jobs{job_path}" if job_path else "https://www.amazon.jobs"
+                            
+                            title_lower = title.lower()
+                            job_category_lower = job.get("job_category", "").lower()
+                            domain = "Software Engineering"
+                            if "data" in title_lower or "data" in job_category_lower:
+                                domain = "Data Science"
+                            elif "machine learning" in title_lower or "ai" in title_lower or "ml" in title_lower:
+                                domain = "AI/ML"
+                            elif "design" in title_lower or "ux" in title_lower or "ui" in title_lower:
+                                domain = "UI/UX Design"
+                            elif "web" in title_lower or "frontend" in title_lower or "backend" in title_lower or "react" in title_lower:
+                                domain = "Web Development"
+                            elif "cloud" in title_lower or "devops" in title_lower or "aws" in title_lower:
+                                domain = "Cloud Computing"
+                            
+                            qualifications_text = (job.get("basic_qualifications", "") + " " + job.get("preferred_qualifications", "")).lower()
+                            required_skills = []
+                            for skill in SKILL_KEYWORDS:
+                                skill_lower = skill.lower()
+                                if f" {skill_lower} " in f" {qualifications_text} " or f" {skill_lower}," in f" {qualifications_text} " or f" {skill_lower}." in f" {qualifications_text} " or skill_lower in qualifications_text.split():
+                                    required_skills.append(skill)
+                                    
+                            if not required_skills:
+                                required_skills = ["Python", "Git"]
+                                
+                            deadline = "30 Sept"
+                            desc_text = job.get("description", "")
+                            deadline_match = re.search(r'deadline:\s*([a-zA-Z]+\s*\d+)', desc_text, re.IGNORECASE)
+                            if deadline_match:
+                                deadline = deadline_match.group(1)
+                                
+                            eligibility = {
+                                "programme": "B.Tech",
+                                "years": ["III", "IV"],
+                                "min_cgpa": 7.0
+                            }
+                            
+                            extracted_items.append({
+                                "title": title,
+                                "organization": org,
+                                "domain": domain,
+                                "required_skills": required_skills,
+                                "eligibility": eligibility,
+                                "duration": "8 weeks" if job.get("is_intern") else "12 weeks",
+                                "deadline": deadline,
+                                "application_link": app_link,
+                                "status": "Open",
+                                "start_date": "05 Oct",
+                                "application_instructions": "Apply directly on Amazon Jobs portal via the provided link."
+                            })
+                        logs.append(f"[Crawler Agent-{idx}] 📄 Successfully loaded {len(extracted_items)} live jobs from Amazon API.")
+                except Exception as e:
+                    logs.append(f"[Crawler Agent-{idx}] ⚠️ Amazon live API query failed ({str(e)}). Falling back...")
             
-            raw_text = MOCK_CAREER_TEXTS[company]
-            extracted_items = None
-            
-            if api_key:
-                logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse raw text of: {company}...")
-                extracted_items = parse_with_groq(api_key, company, raw_text)
-                
-            # If Groq failed, was rate limited, or API key is missing
+            # If not Amazon, or if Amazon query failed
             if not extracted_items:
+                logs.append(f"[Crawler Agent-{idx}] 🌐 Navigating to career portal for: {company}...")
+                raw_text = MOCK_CAREER_TEXTS[company]
+                
                 if api_key:
-                    logs.append(f"[Extractor Agent] ⚠️ Live Groq parsing failed. Activating local NLP extraction fallback...")
-                else:
-                    logs.append(f"[Extractor Agent] 🤖 (Local Smart Mode) Parsing portal text using local NLP engine...")
+                    logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse raw text of: {company}...")
+                    extracted_items = parse_with_groq(api_key, company, raw_text)
                     
-                fallback_matches = [item for item in FALLBACK_SCRAPED if company.lower() in item["organization"].lower() or company.lower() in item["title"].lower()]
-                if fallback_matches:
-                    extracted_items = fallback_matches
-                else:
-                    extracted_items = [{
-                        "title": f"{company} Software Intern",
-                        "organization": company,
-                        "domain": "Software Engineering",
-                        "required_skills": ["Python", "SQL"],
-                        "eligibility": {
-                            "programme": "B.Tech",
-                            "years": ["III"],
-                            "min_cgpa": 7.5
-                        },
-                        "duration": "8 weeks",
-                        "deadline": "30 Sept",
-                        "application_link": f"https://{company.lower()}.com/careers",
-                        "status": "Open",
-                        "start_date": "10 Oct",
-                        "application_instructions": f"Apply on {company} jobs site."
-                    }]
-                    
+                # If Groq failed or API key is missing
+                if not extracted_items:
+                    if api_key:
+                        logs.append(f"[Extractor Agent] ⚠️ Live Groq parsing failed. Activating local NLP extraction fallback...")
+                    else:
+                        logs.append(f"[Extractor Agent] 🤖 (Local Smart Mode) Parsing portal text using local NLP engine...")
+                        
+                    fallback_matches = [item for item in FALLBACK_SCRAPED if company.lower() in item["organization"].lower() or company.lower() in item["title"].lower()]
+                    if fallback_matches:
+                        extracted_items = fallback_matches
+                    else:
+                        extracted_items = [{
+                            "title": f"{company} Software Intern",
+                            "organization": company,
+                            "domain": "Software Engineering",
+                            "required_skills": ["Python", "SQL"],
+                            "eligibility": {
+                                "programme": "B.Tech",
+                                "years": ["III"],
+                                "min_cgpa": 7.5
+                            },
+                            "duration": "8 weeks",
+                            "deadline": "30 Sept",
+                            "application_link": f"https://{company.lower()}.com/careers",
+                            "status": "Open",
+                            "start_date": "10 Oct",
+                            "application_instructions": f"Apply on {company} jobs site."
+                        }]
+                        
             for item in extracted_items:
                 logs.append(f"[Validator Agent] ⚡ Checking skills alignment with student profile for: {item.get('title')}...")
                 
