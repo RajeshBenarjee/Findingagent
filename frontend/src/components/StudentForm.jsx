@@ -1,5 +1,21 @@
 import React, { useState } from 'react';
 import { parseResume } from '../api';
+import { 
+  User, 
+  Upload, 
+  Code, 
+  Sparkles, 
+  BookOpen, 
+  GraduationCap, 
+  Award, 
+  Calendar, 
+  Clock, 
+  FileText, 
+  Loader2, 
+  RotateCcw, 
+  Zap,
+  CheckCircle
+} from 'lucide-react';
 
 export default function StudentForm({ onSubmit, isLoading }) {
   const [skills, setSkills] = useState('Python, Machine Learning, SQL, Figma');
@@ -137,26 +153,35 @@ export default function StudentForm({ onSubmit, isLoading }) {
 
   return (
     <form onSubmit={handleSubmit} className="student-form">
-      <h3>Enter Student Profile</h3>
+      <h3 className="form-header-title">
+        <User size={22} className="text-cyan" /> AI Career Profile
+      </h3>
 
       {/* Demo Presets Block */}
       <div className="demo-presets">
-        <span className="preset-label">Demo Cases (Quick Load):</span>
+        <span className="preset-label">
+          <Zap size={14} style={{ display: 'inline', marginRight: '4px' }} /> Quick Load Demo Presets:
+        </span>
         <div className="preset-buttons">
-          <button type="button" onClick={() => loadDemoProfile('case1')} className="btn-preset btn-preset-ineligible">
-            1️⃣ 0 Eligible Cases
+          <button type="button" onClick={() => loadDemoProfile('case1')} className="btn-preset">
+            <span>1️⃣ 0 Eligible Cases</span>
+            <span style={{ fontSize: '0.7rem', color: '#f43f5e' }}>Ineligible</span>
           </button>
-          <button type="button" onClick={() => loadDemoProfile('case2')} className="btn-preset btn-preset-ai">
-            2️⃣ ML Intern Closed
+          <button type="button" onClick={() => loadDemoProfile('case2')} className="btn-preset">
+            <span>2️⃣ ML Intern Closed</span>
+            <span style={{ fontSize: '0.7rem', color: '#38bdf8' }}>Status Change</span>
           </button>
-          <button type="button" onClick={() => loadDemoProfile('case3')} className="btn-preset btn-preset-mystery">
-            3️⃣ CGPA Constraint
+          <button type="button" onClick={() => loadDemoProfile('case3')} className="btn-preset">
+            <span>3️⃣ CGPA Constraint</span>
+            <span style={{ fontSize: '0.7rem', color: '#f59e0b' }}>CGPA Filter</span>
           </button>
-          <button type="button" onClick={() => loadDemoProfile('case4')} className="btn-preset btn-preset-web">
-            4️⃣ Duration Case (12w vs 8w)
+          <button type="button" onClick={() => loadDemoProfile('case4')} className="btn-preset">
+            <span>4️⃣ Duration Case (12w vs 8w)</span>
+            <span style={{ fontSize: '0.7rem', color: '#10b981' }}>Duration</span>
           </button>
-          <button type="button" onClick={() => loadDemoProfile('case5')} className="btn-preset btn-preset-mystery">
-            5️⃣ Start Date Case (Today vs 1w)
+          <button type="button" onClick={() => loadDemoProfile('case5')} className="btn-preset">
+            <span>5️⃣ Start Date Case (Today vs 1w)</span>
+            <span style={{ fontSize: '0.7rem', color: '#c084fc' }}>Start Date</span>
           </button>
         </div>
       </div>
@@ -164,7 +189,8 @@ export default function StudentForm({ onSubmit, isLoading }) {
       {/* Resume Upload Box */}
       <div className="resume-upload-container">
         <label htmlFor="resume-upload" className="upload-label">
-          📄 Upload Resume (PDF) to Extract Skills
+          <FileText size={15} style={{ display: 'inline', marginRight: '4px', color: '#38bdf8' }} /> 
+          Upload PDF Resume (AI Extraction)
         </label>
         <input 
           type="file" 
@@ -180,17 +206,21 @@ export default function StudentForm({ onSubmit, isLoading }) {
         >
           {isParsing ? (
             <div className="parsing-status">
-              <div className="spinner-mini"></div>
-              <span>Analyzing resume keywords...</span>
+              <Loader2 size={18} className="spinner" style={{ width: '18px', height: '18px' }} />
+              <span>Scanning resume keywords...</span>
             </div>
           ) : (
-            <span className="upload-hint">📁 Drag/Click to upload PDF resume</span>
+            <span className="upload-hint">
+              <Upload size={16} /> Drag/Click to upload PDF resume
+            </span>
           )}
         </div>
       </div>
       
       <div className="form-group">
-        <label htmlFor="skills">Skills (comma-separated)</label>
+        <label htmlFor="skills">
+          <Code size={14} style={{ display: 'inline', marginRight: '4px', color: '#38bdf8' }} /> Skills (comma-separated)
+        </label>
         <input
           type="text"
           id="skills"
@@ -202,7 +232,9 @@ export default function StudentForm({ onSubmit, isLoading }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="interests">Areas of Interest (comma-separated)</label>
+        <label htmlFor="interests">
+          <Sparkles size={14} style={{ display: 'inline', marginRight: '4px', color: '#8b5cf6' }} /> Areas of Interest
+        </label>
         <input
           type="text"
           id="interests"
@@ -213,7 +245,9 @@ export default function StudentForm({ onSubmit, isLoading }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="programme">Programme</label>
+        <label htmlFor="programme">
+          <GraduationCap size={14} style={{ display: 'inline', marginRight: '4px', color: '#38bdf8' }} /> Academic Programme
+        </label>
         <input
           type="text"
           id="programme"
@@ -256,10 +290,10 @@ export default function StudentForm({ onSubmit, isLoading }) {
         </div>
       </div>
 
-      {/* Constraints Fields for Mystery Mission */}
+      {/* Constraints Fields */}
       <div className="form-row">
         <div className="form-group col">
-          <label htmlFor="max-duration">Max Duration (Weeks)</label>
+          <label htmlFor="max-duration">Max Weeks</label>
           <input
             type="number"
             id="max-duration"
@@ -285,10 +319,18 @@ export default function StudentForm({ onSubmit, isLoading }) {
 
       <div className="form-actions">
         <button type="submit" disabled={isLoading} className="btn btn-primary">
-          {isLoading ? 'Finding Recommendations...' : 'Find Recommendations'}
+          {isLoading ? (
+            <>
+              <Loader2 size={18} className="spinner" style={{ width: '18px', height: '18px' }} /> Matching Opportunities...
+            </>
+          ) : (
+            <>
+              <Sparkles size={18} /> Find Recommendations
+            </>
+          )}
         </button>
         <button type="button" onClick={handleClear} disabled={isLoading} className="btn btn-secondary">
-          Clear Form
+          <RotateCcw size={16} /> Reset Profile
         </button>
       </div>
     </form>

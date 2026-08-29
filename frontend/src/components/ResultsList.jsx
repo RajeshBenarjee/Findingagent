@@ -1,5 +1,27 @@
 import React, { useState } from 'react';
 import { sendEmailAlert } from '../api';
+import { 
+  Award, 
+  Building2, 
+  CheckCircle2, 
+  AlertCircle, 
+  Sparkles, 
+  ExternalLink, 
+  Calendar, 
+  Bell, 
+  Bookmark, 
+  BookOpen, 
+  GraduationCap, 
+  Bot, 
+  Send, 
+  TrendingUp, 
+  RefreshCw, 
+  FileText, 
+  Check, 
+  X,
+  Zap,
+  Briefcase
+} from 'lucide-react';
 
 const CURATED_LEARNING_RESOURCES = {
   'python': { name: 'Kaggle Python Course', url: 'https://www.kaggle.com/learn/python' },
@@ -147,13 +169,11 @@ export default function ResultsList({ results, onTrackOpportunity }) {
       for (const skill of requiredSkills) {
         const key = skill.toLowerCase().trim();
         if (SKILL_QUESTIONS[key]) {
-          // Add first available question for this skill
           list.push(SKILL_QUESTIONS[key][0]);
         }
         if (list.length >= 3) break;
       }
     }
-    // Fill up with default questions if we don't have 3
     while (list.length < 3) {
       const remaining = DEFAULT_QUESTIONS[list.length];
       if (remaining) {
@@ -209,8 +229,10 @@ export default function ResultsList({ results, onTrackOpportunity }) {
       {/* Reassessment Transition Table */}
       {transition_table && transition_table.length > 0 && (
         <div className="reassessment-panel">
-          <h3>🔄 Shortlist Reassessment & Adaptability</h3>
-          <p className="reassessment-subtitle">
+          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <RefreshCw size={20} className="text-cyan" /> Shortlist Reassessment & Adaptability
+          </h3>
+          <p className="reassessment-subtitle" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.2rem' }}>
             Changes detected in internship status, academic criteria, and constraints.
           </p>
 
@@ -218,7 +240,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
           <div className="reassessment-summary-grid">
             <div className="summary-card">
               <span className="summary-title">Opportunities Removed</span>
-              <span className="summary-value">
+              <span className="summary-value" style={{ fontSize: '1rem' }}>
                 {opportunities_removed && opportunities_removed.length > 0 
                   ? opportunities_removed.join(', ') 
                   : 'None'}
@@ -226,7 +248,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
             </div>
             <div className="summary-card">
               <span className="summary-title">Reason for Removal</span>
-              <span className="summary-value">
+              <span className="summary-value" style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
                 {reasons_for_removal && reasons_for_removal.length > 0 
                   ? reasons_for_removal.join(' / ') 
                   : 'N/A'}
@@ -259,42 +281,50 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                 {transition_table.map((row, idx) => (
                   <tr key={idx} className={`row-decision-${row.decision.toLowerCase()}`}>
                     <td><strong>{row.title}</strong></td>
-                    <td><span className="status-pill status-prev">{row.prev_status}</span></td>
-                    <td><span className={`status-pill status-updated-${row.updated_status.toLowerCase().replace(/ /g, '-')}`}>{row.updated_status}</span></td>
-                    <td><span className={`decision-pill decision-${row.decision.toLowerCase()}`}>{row.decision}</span></td>
-                    <td className="reason-cell">{row.reason}</td>
+                    <td><span className="status-pill status-prev" style={{ fontSize: '0.75rem', background: 'rgba(255, 255, 255, 0.08)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>{row.prev_status}</span></td>
+                    <td><span className="status-pill" style={{ fontSize: '0.75rem', background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>{row.updated_status}</span></td>
+                    <td><span className="decision-pill" style={{ fontSize: '0.75rem', fontWeight: 800, color: row.decision.toLowerCase() === 'kept' ? '#34d399' : '#f43f5e' }}>{row.decision}</span></td>
+                    <td className="reason-cell" style={{ color: 'var(--text-muted)' }}>{row.reason}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div className="remaining-count-alert">
-            ℹ️ <strong>{eligible_remaining_count}</strong> eligible opportunities remaining.
+          <div className="remaining-count-alert" style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <CheckCircle2 size={16} /> <strong>{eligible_remaining_count}</strong> eligible opportunities remaining.
           </div>
         </div>
       )}
 
-      {/* Top Recommendation Highlight Card */}
+      {/* Flagship Top Recommendation Card */}
       {top_recommendation && (
         <div className="top-recommendation-card">
-          <div className="top-badge">🏆 TOP MATCH ENGINE</div>
+          <div className="top-badge">
+            <Award size={14} style={{ display: 'inline', marginRight: '4px' }} /> #1 TOP MATCH ENGINE
+          </div>
           
           <div className="card-header-row">
             <div>
-              <div className="header-meta">
-                <span className="status-badge status-eligible">✓ Eligible</span>
-                <span className={`match-level-badge ${getMatchLevelClass(top_recommendation.match_level)}`}>
+              <div className="header-meta" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                <span className="status-badge status-eligible" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', border: '1px solid rgba(16, 185, 129, 0.3)', padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                  <CheckCircle2 size={12} /> Eligible
+                </span>
+                <span className={`match-level-badge ${getMatchLevelClass(top_recommendation.match_level)}`} style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '0.2rem 0.6rem', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 800 }}>
                   {top_recommendation.match_level} Relevance
                 </span>
               </div>
               <h2 className="title">{top_recommendation.title}</h2>
-              <h4 className="organization">🏢 {top_recommendation.organization || 'TBD - Placement Cell'}</h4>
+              <h4 className="organization" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Building2 size={18} /> {top_recommendation.organization || 'TBD - Placement Cell'}
+              </h4>
             </div>
             <div className="rank-display">#1 Ranked</div>
           </div>
 
           <div className="reason-text">
-            <strong>💡 Recommendation Insight & Why Recommended:</strong>
+            <strong>
+              <Sparkles size={16} /> Recommendation Insight & Why Recommended:
+            </strong>
             <p className="why-paragraph">{top_recommendation.why_recommended}</p>
           </div>
 
@@ -321,7 +351,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
 
             {top_recommendation.missing_preferred_skills.length > 0 && (
               <div className="skill-group">
-                <span className="skill-label">⚠️ Missing Preferred Skills:</span>
+                <span className="skill-label">⚠️ Missing Preferred:</span>
                 <div className="chips">
                   {top_recommendation.missing_preferred_skills.map((skill, index) => (
                     <span key={index} className="chip chip-missing">{skill}</span>
@@ -337,7 +367,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
             <div className="plan-grid">
               <div className="plan-item">
                 <strong>New Top Recommendation:</strong>
-                <span className="plan-val-title">⭐ {top_recommendation.title}</span>
+                <span className="plan-val-title" style={{ color: 'var(--accent-cyan)', fontWeight: 800 }}>⭐ {top_recommendation.title}</span>
               </div>
               <div className="plan-item">
                 <strong>Why:</strong>
@@ -372,7 +402,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
             </div>
           </div>
 
-          {/* Interactive Mock Interview & Gap Analyzer Buttons */}
+          {/* Action Buttons */}
           <div className="action-buttons-row">
             <button 
               type="button" 
@@ -382,7 +412,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                 resetInterview();
               }}
             >
-              {interviewActive ? 'Close Mock Interview ✕' : '🤖 Practice Mock Interview'}
+              <Bot size={16} /> {interviewActive ? 'Close Mock Interview ✕' : 'Practice Mock Interview'}
             </button>
 
             {top_recommendation.missing_preferred_skills.length > 0 && (
@@ -391,7 +421,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                 className="btn btn-secondary btn-action"
                 onClick={() => toggleSkillsGap('top')}
               >
-                {expandedGap['top'] ? 'Hide Learning Path 🎓' : 'View Learning Path 🎓'}
+                <GraduationCap size={16} /> {expandedGap['top'] ? 'Hide Learning Path' : 'View Learning Path'}
               </button>
             )}
 
@@ -400,7 +430,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
               className="btn btn-secondary btn-action btn-alert"
               onClick={() => handleNotifyMe(top_recommendation)}
             >
-              🚨 Email Alert
+              <Bell size={16} /> Email Alert
             </button>
 
             <button 
@@ -408,15 +438,19 @@ export default function ResultsList({ results, onTrackOpportunity }) {
               className="btn btn-primary btn-action"
               onClick={() => onTrackOpportunity(top_recommendation)}
             >
-              📁 Track Application
+              <Bookmark size={16} /> Track Application
             </button>
           </div>
 
-          {/* Skills Gap Curated Learning Path */}
+          {/* Learning Roadmap Drawer */}
           {expandedGap['top'] && top_recommendation.missing_preferred_skills.length > 0 && (
             <div className="skills-gap-panel">
-              <h4>🎓 Curated Learning Roadmap:</h4>
-              <p className="panel-desc">Bridge the skills gap with these free learning resources:</p>
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <GraduationCap size={18} /> Curated Learning Roadmap:
+              </h4>
+              <p className="panel-desc" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                Bridge the skills gap with these free learning resources:
+              </p>
               <div className="learning-links-grid">
                 {top_recommendation.missing_preferred_skills.map((skill, i) => {
                   const res = CURATED_LEARNING_RESOURCES[skill.toLowerCase().trim()];
@@ -425,7 +459,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                       Learn <strong>{skill}</strong> on {res.name} →
                     </a>
                   ) : (
-                    <div key={i} className="btn-learning-placeholder">
+                    <div key={i} className="btn-learning-placeholder" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
                       Learn {skill} (Search online tutorials)
                     </div>
                   );
@@ -434,16 +468,20 @@ export default function ResultsList({ results, onTrackOpportunity }) {
             </div>
           )}
 
-          {/* Interactive Mock Interview Panel */}
+          {/* Interactive Mock Interview Drawer */}
           {interviewActive && (
             <div className="mock-interview-panel">
-              <h4>🤖 Practice Mock Interview (Automated Evaluator)</h4>
-              <p className="panel-desc">Answer the questions below. The matching engine evaluates keywords inside your response.</p>
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--accent-cyan)', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                <Bot size={18} /> Practice Mock Interview (Automated Evaluator)
+              </h4>
+              <p className="panel-desc" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                Answer the questions below. The matching engine evaluates keywords inside your response.
+              </p>
               
               {(() => {
                 const questions = getQuestions(top_recommendation.matched_skills.concat(top_recommendation.missing_preferred_skills));
                 return (
-                  <div className="interview-body">
+                  <div className="interview-body" style={{ marginTop: '1rem' }}>
                     {questions.map((q, idx) => (
                       <div key={idx} className="interview-question-block">
                         <label><strong>Question {idx + 1}:</strong> {q.q}</label>
@@ -461,8 +499,9 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                         type="button" 
                         className="btn btn-primary"
                         onClick={() => handleGradeInterview(questions)}
+                        style={{ width: 'auto' }}
                       >
-                        Submit answers & Grade
+                        <Send size={16} /> Submit answers & Grade
                       </button>
                     ) : (
                       <div className="feedback-result">
@@ -471,18 +510,18 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                         </div>
                         <p className="feedback-message"><strong>Evaluator Feedback:</strong> {interviewFeedback.feedbackMsg}</p>
                         
-                        <div className="individual-grades">
+                        <div className="individual-grades" style={{ marginTop: '0.85rem', display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
                           {interviewFeedback.grades.map((g, i) => (
-                            <div key={i} className="q-grade-item">
+                            <div key={i} className="q-grade-item" style={{ background: 'rgba(7, 10, 18, 0.6)', padding: '0.75rem', borderRadius: '8px', fontSize: '0.82rem' }}>
                               <p className="q-title"><strong>Q{i+1}:</strong> {g.question}</p>
-                              <p className="q-points">Score: {g.score}/10</p>
+                              <p className="q-points" style={{ color: '#34d399', fontWeight: 700 }}>Score: {g.score}/10</p>
                               <p className="q-keys">Matched keywords: {g.matched.length > 0 ? g.matched.join(', ') : 'None'}</p>
-                              <p className="q-tips">Keywords expected: {g.expectedKeys.join(', ')}</p>
+                              <p className="q-tips" style={{ color: 'var(--text-muted)' }}>Keywords expected: {g.expectedKeys.join(', ')}</p>
                             </div>
                           ))}
                         </div>
 
-                        <button type="button" className="btn btn-secondary" onClick={resetInterview}>
+                        <button type="button" className="btn btn-secondary" onClick={resetInterview} style={{ marginTop: '1rem', width: 'auto' }}>
                           Retake Interview
                         </button>
                       </div>
@@ -493,23 +532,21 @@ export default function ResultsList({ results, onTrackOpportunity }) {
             </div>
           )}
 
-          <div className="card-instructions-row" style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
-            <p style={{ margin: 0, fontSize: '0.85rem' }}><strong>Application Instructions:</strong> {top_recommendation.application_instructions}</p>
-          </div>
-          
-          <div className="card-status-row" style={{ marginTop: '0.5rem', marginBottom: '1rem', display: 'flex', gap: '1rem', fontSize: '0.85rem' }}>
-            <span>Current Application Status: <strong className={`status-pill status-${top_recommendation.status.toLowerCase().replace(/ /g, '-')}`}>{top_recommendation.status}</strong></span>
+          <div className="card-instructions-row" style={{ marginTop: '1rem', padding: '0.75rem', background: 'rgba(7, 10, 18, 0.6)', borderRadius: '10px', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: 'var(--text-muted)' }}><strong>Application Instructions:</strong> {top_recommendation.application_instructions}</p>
           </div>
 
-          <div className="card-footer-row" style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(37,99,235,0.1)' }}>
-            <span className="deadline-info">📅 Application Deadline: <strong>{top_recommendation.deadline}</strong></span>
+          <div className="card-footer-row">
+            <span className="deadline-info" style={{ fontSize: '0.9rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+              <Calendar size={16} /> Deadline: <strong style={{ color: 'var(--text-main)' }}>{top_recommendation.deadline}</strong>
+            </span>
             {top_recommendation.application_link ? (
-              <a href={top_recommendation.application_link} target="_blank" rel="noopener noreferrer" className="btn btn-apply">
-                Apply Online ↗
+              <a href={top_recommendation.application_link} target="_blank" rel="noopener noreferrer" className="btn btn-apply" style={{ width: 'auto', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                Apply Online <ExternalLink size={14} />
               </a>
             ) : (
-              <button disabled className="btn btn-apply-disabled">
-                Contact Placement Cell 🔗
+              <button disabled className="btn btn-apply-disabled" style={{ width: 'auto' }}>
+                Contact Placement Cell
               </button>
             )}
           </div>
@@ -518,14 +555,16 @@ export default function ResultsList({ results, onTrackOpportunity }) {
 
       {/* Main Recommendations Section */}
       <div className="recommendations-section">
-        <h3>Shortlisted Eligible Opportunities ({ranked.length})</h3>
+        <h3>
+          <Briefcase size={20} className="text-cyan" /> Shortlisted Eligible Opportunities ({ranked.length})
+        </h3>
         
         {ranked.length === 0 ? (
-          <div className="no-matches-alert" style={{ textAlign: 'center', padding: '3rem', backgroundColor: '#fef2f2', border: '2px dashed #fca5a5', borderRadius: '12px', marginBottom: '2rem' }}>
-            <h2 style={{ color: '#b91c1c', fontSize: '2.25rem', fontWeight: '900', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+          <div className="no-matches-alert" style={{ textAlign: 'center', padding: '3.5rem', background: 'rgba(244, 63, 94, 0.1)', border: '2px dashed rgba(244, 63, 94, 0.3)', borderRadius: '20px', marginBottom: '2rem' }}>
+            <h2 style={{ color: '#f43f5e', fontSize: '2rem', fontWeight: '900', margin: 0, textTransform: 'uppercase' }}>
               NO Opportunities Found
             </h2>
-            <p style={{ color: '#7f1d1d', marginTop: '0.5rem', fontWeight: '700', fontSize: '1.05rem' }}>
+            <p style={{ color: '#fca5a5', marginTop: '0.5rem', fontWeight: '700', fontSize: '1rem' }}>
               {message || "No internships match your eligibility requirements."}
             </p>
           </div>
@@ -535,16 +574,20 @@ export default function ResultsList({ results, onTrackOpportunity }) {
               <div key={internship.rank} className="internship-card">
                 <div className="rank-badge">Rank #{internship.rank}</div>
                 
-                <div className="card-header-row">
+                <div className="card-header-row" style={{ marginTop: 0 }}>
                   <div>
-                    <div className="header-meta">
-                      <span className="status-badge status-eligible">✓ Eligible</span>
-                      <span className={`match-level-badge ${getMatchLevelClass(internship.match_level)}`}>
+                    <div className="header-meta" style={{ display: 'flex', gap: '0.4rem', marginBottom: '0.4rem' }}>
+                      <span className="status-badge status-eligible" style={{ background: 'rgba(16, 185, 129, 0.15)', color: '#34d399', padding: '0.15rem 0.5rem', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 800 }}>
+                        ✓ Eligible
+                      </span>
+                      <span className={`match-level-badge ${getMatchLevelClass(internship.match_level)}`} style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8', padding: '0.15rem 0.5rem', borderRadius: '20px', fontSize: '0.72rem', fontWeight: 800 }}>
                         {internship.match_level}
                       </span>
                     </div>
                     <h3 className="title">{internship.title}</h3>
-                    <h5 className="organization">🏢 {internship.organization || 'TBD - Placement Cell'}</h5>
+                    <h5 className="organization" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <Building2 size={14} /> {internship.organization || 'TBD - Placement Cell'}
+                    </h5>
                   </div>
                 </div>
 
@@ -586,7 +629,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                   )}
                 </div>
 
-                {/* Sub-actions for ranked opportunities */}
+                {/* Sub-actions */}
                 <div className="ranked-item-actions">
                   {internship.missing_preferred_skills.length > 0 && (
                     <button 
@@ -594,7 +637,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                       className="btn-link-action"
                       onClick={() => toggleSkillsGap(internship.rank)}
                     >
-                      {expandedGap[internship.rank] ? 'Hide Curated Learning Path 🎓' : 'View Learning Path 🎓'}
+                      {expandedGap[internship.rank] ? 'Hide Learning Path 🎓' : 'View Learning Path 🎓'}
                     </button>
                   )}
 
@@ -615,19 +658,19 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                   </button>
                 </div>
 
-                {/* Collapsible Learning Path for Ranked Cards */}
+                {/* Collapsible Learning Path */}
                 {expandedGap[internship.rank] && internship.missing_preferred_skills.length > 0 && (
-                  <div className="skills-gap-panel-mini">
-                    <strong>🎓 Free Learning Courses:</strong>
-                    <div className="mini-learning-list">
+                  <div className="skills-gap-panel-mini" style={{ background: 'rgba(7, 10, 18, 0.6)', padding: '0.75rem', borderRadius: '8px', marginTop: '0.65rem' }}>
+                    <strong style={{ fontSize: '0.78rem', color: 'var(--accent-cyan)' }}>🎓 Free Learning Courses:</strong>
+                    <div className="mini-learning-list" style={{ marginTop: '0.4rem', display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
                       {internship.missing_preferred_skills.map((skill, i) => {
                         const res = CURATED_LEARNING_RESOURCES[skill.toLowerCase().trim()];
                         return res ? (
-                          <a key={i} href={res.url} target="_blank" rel="noopener noreferrer" className="mini-learning-link">
+                          <a key={i} href={res.url} target="_blank" rel="noopener noreferrer" className="mini-learning-link" style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', textDecoration: 'none' }}>
                             Learn {skill} ({res.name}) →
                           </a>
                         ) : (
-                          <span key={i} className="mini-learning-placeholder">
+                          <span key={i} className="mini-learning-placeholder" style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                             Learn {skill} (Search guides)
                           </span>
                         );
@@ -636,23 +679,21 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                   </div>
                 )}
 
-                <div className="card-instructions-row-mini" style={{ marginTop: '0.75rem', padding: '0.5rem', backgroundColor: '#fcfcfc', borderRadius: '4px', border: '1px dashed #e2e8f0', fontSize: '0.8rem' }}>
+                <div className="card-instructions-row-mini" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(7, 10, 18, 0.4)', borderRadius: '6px', border: '1px dashed rgba(255, 255, 255, 0.08)', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
                   <p style={{ margin: 0 }}><strong>Instructions:</strong> {internship.application_instructions}</p>
-                </div>
-                
-                <div style={{ marginTop: '0.4rem', marginBottom: '0.75rem', fontSize: '0.8rem', display: 'flex', gap: '0.5rem' }}>
-                  <span>Status: <strong className={`status-pill status-${internship.status.toLowerCase().replace(/ /g, '-')}`}>{internship.status}</strong></span>
                 </div>
 
                 <div className="card-footer-row">
-                  <span className="deadline-info">📅 Deadline: <strong>{internship.deadline}</strong></span>
+                  <span className="deadline-info" style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    📅 Deadline: <strong style={{ color: 'var(--text-main)' }}>{internship.deadline}</strong>
+                  </span>
                   {internship.application_link ? (
                     <a href={internship.application_link} target="_blank" rel="noopener noreferrer" className="btn btn-apply-sm">
-                      Apply ↗
+                      Apply <ExternalLink size={12} />
                     </a>
                   ) : (
                     <button disabled className="btn btn-apply-disabled-sm">
-                      Contact Cell 🔗
+                      Contact Cell
                     </button>
                   )}
                 </div>
@@ -664,20 +705,26 @@ export default function ResultsList({ results, onTrackOpportunity }) {
 
       {/* Not Eligible Opportunities Section */}
       {not_eligible && not_eligible.length > 0 && (
-        <div className="not-eligible-section">
-          <h3>Not Eligible / Excluded Positions ({not_eligible.length})</h3>
-          <p className="not-eligible-intro">
+        <div className="not-eligible-section" style={{ background: 'var(--bg-card)', borderRadius: '20px', padding: '1.75rem', border: '1px dashed rgba(244, 63, 94, 0.3)' }}>
+          <h3 style={{ color: '#f43f5e' }}>
+            <AlertCircle size={20} /> Not Eligible / Excluded Positions ({not_eligible.length})
+          </h3>
+          <p className="not-eligible-intro" style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
             These positions from the dataset did not pass your program, year, or CGPA checks, or they had 0 skill overlap.
           </p>
-          <div className="not-eligible-list">
+          <div className="not-eligible-list" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1rem' }}>
             {not_eligible.map((item, index) => (
-              <div key={index} className="not-eligible-item">
-                <div className="not-eligible-header">
-                  <h4 className="title">🏢 {item.organization || 'Placement Cell'} — {item.title}</h4>
-                  <span className="status-badge status-ineligible">✕ Ineligible</span>
+              <div key={index} className="not-eligible-item" style={{ background: 'rgba(7, 10, 18, 0.6)', border: '1px solid rgba(244, 63, 94, 0.2)', borderRadius: '12px', padding: '1rem' }}>
+                <div className="not-eligible-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                  <h4 className="title" style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--text-main)', margin: 0 }}>
+                    🏢 {item.organization || 'Placement Cell'} — {item.title}
+                  </h4>
+                  <span className="badge-not-eligible" style={{ background: 'rgba(244, 63, 94, 0.15)', color: '#f43f5e', fontSize: '0.7rem', fontWeight: 800, padding: '0.15rem 0.5rem', borderRadius: '4px' }}>
+                    ✕ Ineligible
+                  </span>
                 </div>
-                <p className="not-eligible-reason">
-                  <strong>Reason for Removal:</strong> {item.reason}
+                <p className="not-eligible-reason" style={{ fontSize: '0.82rem', color: 'var(--text-muted)', margin: 0 }}>
+                  <strong>Reason:</strong> {item.reason}
                 </p>
               </div>
             ))}

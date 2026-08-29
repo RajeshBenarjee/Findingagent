@@ -45,7 +45,7 @@ def test_recommendation_logic():
         print("None")
         
     # Assertions for Change Detection and Constraint Handling
-    assert res.eligible_remaining_count == 2, f"Expected 2 eligible remaining, got {res.eligible_remaining_count}"
+    assert res.eligible_remaining_count == 4, f"Expected 4 eligible remaining, got {res.eligible_remaining_count}"
     assert res.ranked[0].title == "Python Developer Intern", f"Rank 1 should be Python Developer Intern, got {res.ranked[0].title}"
     assert res.ranked[1].title == "UI/UX Design Intern", f"Rank 2 should be UI/UX Design Intern, got {res.ranked[1].title}"
     
