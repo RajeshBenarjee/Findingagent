@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { runWebScraper, importScrapedOpportunities } from '../api';
 
 const COMPANIES = [
@@ -9,23 +9,12 @@ const COMPANIES = [
 ];
 
 export default function CareerScraper({ studentSkills }) {
-  const [apiKey, setApiKey] = useState('');
   const [selectedCompanies, setSelectedCompanies] = useState(["Google", "Microsoft", "Meta", "Amazon"]);
   const [customUrl, setCustomUrl] = useState('');
   const [isScraping, setIsScraping] = useState(false);
-  const [logs, setLogs] = useState([]);
   const [scrapedList, setScrapedList] = useState([]);
   const [importing, setImporting] = useState(false);
   const [importMessage, setImportMessage] = useState('');
-  
-  const terminalEndRef = useRef(null);
-
-  // Auto-scroll terminal logs
-  useEffect(() => {
-    if (terminalEndRef.current) {
-      terminalEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
-  }, [logs]);
 
   const handleToggleCompany = (company) => {
     if (selectedCompanies.includes(company)) {
@@ -50,30 +39,21 @@ export default function CareerScraper({ studentSkills }) {
     }
 
     setIsScraping(true);
-    setLogs(["[System] Spawning crawler agents...", "[System] Loading configuration parameters..."]);
     setScrapedList([]);
     setImportMessage('');
 
     try {
       // Call backend scraper sending selected companies list, custom url, and current student profile skills
-      const result = await runWebScraper(selectedCompanies, customUrl, studentSkills, apiKey);
+      // API Key is loaded automatically from backend .env
+      const result = await runWebScraper(selectedCompanies, customUrl, studentSkills, null);
       
-      // Stream logs in real-time for presentation effect
-      let currentLogIndex = 0;
-      const interval = setInterval(() => {
-        if (currentLogIndex < result.logs.length) {
-          setLogs(prev => [...prev, result.logs[currentLogIndex]]);
-          currentLogIndex++;
-        } else {
-          clearInterval(interval);
-          setScrapedList(result.opportunities);
-          setIsScraping(false);
-        }
-      }, 150); // 150ms delay per agent log line
-
+      if (result && result.opportunities) {
+        setScrapedList(result.opportunities);
+      }
     } catch (err) {
       console.error(err);
-      setLogs(prev => [...prev, `[Fatal Error] Scrape failed: ${err.message}`]);
+      alert(`Scraping failed: ${err.message}`);
+    } finally {
       setIsScraping(false);
     }
   };
@@ -99,7 +79,7 @@ export default function CareerScraper({ studentSkills }) {
       <div className="scraper-header-panel">
         <h3>🤖 Multi-Agent AI Career Scraper</h3>
         <p className="scraper-description">
-          Select target company portals or scrape a custom careers link. The crawler agents will navigate the pages, extract openings using the Gemini LLM (via `.env` key or manual override), and compute skill alignment dynamically against your active student profile.
+          Select target company portals or scrape a custom careers link. The crawler agents will navigate the pages, extract openings using the Gemini LLM (configured in your backend <code>.env</code> file), and compute skill alignment dynamically against your active student profile.
         </p>
 
         {/* Company Selector Grid Section */}
@@ -140,57 +120,37 @@ export default function CareerScraper({ studentSkills }) {
           />
         </div>
 
-        <div className="api-key-row">
-          <div className="key-input-group">
-            <label htmlFor="gemini-key">Gemini API Key override (Optional - Leave blank to use key in .env or cached demo):</label>
-            <input 
-              type="password" 
-              id="gemini-key" 
-              placeholder="AIzaSy..." 
-              value={apiKey}
-              onChange={(e) => setApiKey(e.target.value)}
-              disabled={isScraping}
-            />
-          </div>
+        <div className="scraper-action-row" style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
           <button 
             type="button" 
             className="btn btn-primary btn-scrape-launch" 
             onClick={handleStartScraping}
             disabled={isScraping}
+            style={{ width: 'auto', minWidth: '220px' }}
           >
-            {isScraping ? 'Agents Crawling Page Portals...' : 'Launch Scraper Agents 🚀'}
+            {isScraping ? 'Scraping Portals...' : 'Launch Scraper Agents 🚀'}
           </button>
         </div>
       </div>
 
-      <div className="scraper-body-grid">
-        {/* Terminal logs console */}
-        <div className="scraper-console-column">
-          <h4>Agent Terminal Console</h4>
-          <div className="terminal-screen">
-            {logs.length === 0 ? (
-              <span className="terminal-placeholder">Console idle. Select company portals and click Launch to view real-time multi-agent activity log.</span>
-            ) : (
-              logs.map((log, idx) => (
-                <div key={idx} className="terminal-line">
-                  <span className="terminal-time">[{new Date().toLocaleTimeString()}]</span> {log}
-                </div>
-              ))
-            )}
-            <div ref={terminalEndRef} />
-          </div>
+      {isScraping && (
+        <div className="loader-container" style={{ margin: '3rem auto', textAlign: 'center' }}>
+          <div className="spinner"></div>
+          <p style={{ marginTop: '1rem', fontWeight: '700', color: '#1e3a8a' }}>Multi-Agent scraper actively crawling pages and parsing job requirements...</p>
         </div>
+      )}
 
-        {/* Scraped Opportunities results list */}
-        <div className="scraped-results-column">
-          <div className="results-header-row">
-            <h4>Scraped Opportunities ({scrapedList.length})</h4>
+      {!isScraping && (
+        <div className="scraped-results-panel">
+          <div className="results-header-row" style={{ borderBottom: '2px solid #e2e8f0', paddingBottom: '0.75rem', marginBottom: '1.5rem' }}>
+            <h4 style={{ margin: 0, fontSize: '1.25rem', fontWeight: '800', color: '#1e293b' }}>Scraped Opportunities ({scrapedList.length})</h4>
             {scrapedList.length > 0 && (
               <button 
                 type="button" 
                 className="btn btn-primary btn-import" 
                 onClick={handleImportToPool}
                 disabled={importing}
+                style={{ padding: '0.5rem 1.25rem', fontSize: '0.85rem' }}
               >
                 {importing ? 'Importing...' : 'Merge to Opportunities Pool 📥'}
               </button>
@@ -198,27 +158,27 @@ export default function CareerScraper({ studentSkills }) {
           </div>
 
           {importMessage && (
-            <div className="import-success-alert">
+            <div className="import-success-alert" style={{ marginBottom: '1.5rem' }}>
               🎉 {importMessage}
             </div>
           )}
 
-          <div className="scraped-cards-container">
+          <div className="scraped-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
             {scrapedList.length === 0 ? (
-              <div className="scraped-placeholder-card">
-                <span>No scraped results yet. Launch the agents above to extract live internship opportunities.</span>
+              <div className="scraped-placeholder-card" style={{ gridColumn: '1 / -1', padding: '5rem 2rem' }}>
+                <span>No scraped results yet. Select company portals above and click Launch to extract live internship opportunities.</span>
               </div>
             ) : (
               scrapedList.map((job, idx) => (
-                <div key={idx} className="scraped-job-card">
-                  <div className="scraped-card-header">
+                <div key={idx} className="scraped-job-card" style={{ backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1.25rem', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                  <div className="scraped-card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.5rem', marginBottom: '0.75rem' }}>
                     <div>
-                      <h5 className="title">{job.title}</h5>
-                      <span className="scraped-org">🏢 {job.organization}</span>
+                      <h5 className="title" style={{ fontSize: '0.95rem', fontWeight: '800', color: '#1e293b', margin: 0 }}>{job.title}</h5>
+                      <span className="scraped-org" style={{ fontSize: '0.75rem', fontWeight: '700', color: '#2563eb' }}>🏢 {job.organization}</span>
                     </div>
                   </div>
-                  <div className="scraped-card-details">
-                    <p><strong>Required Skills:</strong> {job.required_skills.join(', ')}</p>
+                  <div className="scraped-card-details" style={{ fontSize: '0.8rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <p style={{ margin: 0 }}><strong>Required Skills:</strong> {job.required_skills.join(', ')}</p>
                     
                     {/* Skills match matching block */}
                     {job.matched_skills && job.matched_skills.length > 0 && (
@@ -244,16 +204,16 @@ export default function CareerScraper({ studentSkills }) {
                       </div>
                     )}
 
-                    <p><strong>Duration:</strong> {job.duration} | <strong>Starts:</strong> {job.start_date}</p>
-                    <p><strong>Eligibility:</strong> {job.eligibility.programme} ({job.eligibility.years.join(', ')} year) | Min CGPA: {job.eligibility.min_cgpa || 'None'}</p>
-                    <p className="scraped-instructions"><strong>Instructions:</strong> {job.application_instructions}</p>
+                    <p style={{ margin: 0 }}><strong>Duration:</strong> {job.duration} | <strong>Starts:</strong> {job.start_date}</p>
+                    <p style={{ margin: 0 }}><strong>Eligibility:</strong> {job.eligibility.programme} ({job.eligibility.years.join(', ')} year) | Min CGPA: {job.eligibility.min_cgpa || 'None'}</p>
+                    <p className="scraped-instructions" style={{ margin: 0 }}><strong>Instructions:</strong> {job.application_instructions}</p>
                   </div>
                 </div>
               ))
             )}
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
