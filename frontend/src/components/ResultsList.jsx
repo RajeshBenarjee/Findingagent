@@ -1,0 +1,549 @@
+import React, { useState } from 'react';
+import { sendEmailAlert } from '../api';
+
+const CURATED_LEARNING_RESOURCES = {
+  'python': { name: 'Kaggle Python Course', url: 'https://www.kaggle.com/learn/python' },
+  'machine learning': { name: 'Kaggle Intro to Machine Learning', url: 'https://www.kaggle.com/learn/intro-to-machine-learning' },
+  'deep learning': { name: 'Fast.ai Deep Learning Course', url: 'https://course.fast.ai/' },
+  'pytorch': { name: 'PyTorch Tutorials', url: 'https://pytorch.org/tutorials/' },
+  'tensorflow': { name: 'TensorFlow Learn Guides', url: 'https://www.tensorflow.org/tutorials' },
+  'sql': { name: 'W3Schools SQL Tutorial', url: 'https://www.w3schools.com/sql/' },
+  'html': { name: 'MDN HTML Basics', url: 'https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/HTML_basics' },
+  'css': { name: 'MDN CSS Basics', url: 'https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/CSS_basics' },
+  'javascript': { name: 'javascript.info Tutorial', url: 'https://javascript.info/' },
+  'react': { name: 'React Official Documentation', url: 'https://react.dev/learn' },
+  'node.js': { name: 'Node.js Official Guides', url: 'https://nodejs.org/en/docs/guides/' },
+  'express': { name: 'Express MDN Guide', url: 'https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs' },
+  'aws': { name: 'AWS Skill Builder', url: 'https://skillbuilder.aws/' },
+  'linux': { name: 'Linux Journey Tutorial', url: 'https://linuxjourney.com/' },
+  'docker': { name: 'Docker Handbook', url: 'https://docs.docker.com/get-started/' },
+  'kubernetes': { name: 'Play with Kubernetes', url: 'https://labs.play-with-k8s.com/' },
+  'git': { name: 'Pro Git Book (Free)', url: 'https://git-scm.com/book/en/v2' },
+  'java': { name: 'Codecademy Learn Java', url: 'https://www.codecademy.com/learn/learn-java' },
+  'kotlin': { name: 'Kotlin Bootcamp', url: 'https://kotlinlang.org/docs/kotlin-hands-on.html' },
+  'swift': { name: 'Hacking with Swift', url: 'https://www.hackingwithswift.com/100' },
+  'figma': { name: 'Figma Learn Tutorials', url: 'https://www.figma.com/resource-library/learn-figma/' },
+  'adobe xd': { name: 'Adobe XD Learning Tutorials', url: 'https://helpx.adobe.com/support/xd.html' },
+  'powerbi': { name: 'Microsoft Power BI Learn', url: 'https://learn.microsoft.com/en-us/power-bi/' },
+  'tableau': { name: 'Tableau Training Videos', url: 'https://www.tableau.com/learn/training' },
+  'excel': { name: 'Microsoft Excel Training', url: 'https://support.microsoft.com/en-us/excel' },
+  'c#': { name: 'Microsoft C# Learn Paths', url: 'https://learn.microsoft.com/en-us/training/paths/csharp-first-steps/' },
+  'c++': { name: 'LearnCpp.com Tutorials', url: 'https://www.learncpp.com/' },
+  'go': { name: 'A Tour of Go', url: 'https://go.dev/tour/' },
+  'mongodb': { name: 'MongoDB University', url: 'https://university.mongodb.com/' },
+  'graphql': { name: 'How to GraphQL', url: 'https://www.howtographql.com/' },
+  'transformers': { name: 'HuggingFace Course', url: 'https://huggingface.co/learn/nlp-course' },
+  'nlp': { name: 'HuggingFace NLP Guides', url: 'https://huggingface.co/learn' },
+  'd3.js': { name: 'D3.js Tutorials', url: 'https://d3js.org/getting-started' },
+  'opencv': { name: 'OpenCV Tutorials', url: 'https://docs.opencv.org/master/d9/df8/tutorial_root.html' },
+  'wireshark': { name: 'Wireshark Guides', url: 'https://www.wireshark.org/docs/' },
+  'network security': { name: 'Cybrary Network Security', url: 'https://www.cybrary.it/' },
+  'cryptography': { name: 'Coursera Cryptography Course', url: 'https://www.coursera.org/learn/crypto' },
+  'metasploit': { name: 'Metasploit Unleashed', url: 'https://www.offensive-security.com/metasploit-unleashed/' },
+  'product strategy': { name: 'Product School Guides', url: 'https://productschool.com/' },
+  'r': { name: 'Kaggle R Course', url: 'https://www.kaggle.com/learn/r' },
+  'spark': { name: 'Databricks Spark Guides', url: 'https://www.databricks.com/spark/about' },
+  'hadoop': { name: 'Apache Hadoop Tutorial', url: 'https://hadoop.apache.org/' },
+  'vue': { name: 'Vue.js Intro Guides', url: 'https://vuejs.org/guide/introduction.html' },
+  'angular': { name: 'Angular Tour of Heroes', url: 'https://angular.dev/tutorials' },
+  'flutter': { name: 'Flutter Codelabs', url: 'https://docs.flutter.dev/reference/codelabs' },
+  'dart': { name: 'Dart Tutorials', url: 'https://dart.dev/guides' },
+  'terraform': { name: 'HashiCorp Terraform Learn', url: 'https://developer.hashicorp.com/terraform/tutorials' },
+};
+
+const SKILL_QUESTIONS = {
+  'python': [
+    { q: "What is the difference between a list and a tuple in Python?", keys: ["mutable", "immutable", "change"] },
+    { q: "Explain list comprehension in Python and give a brief example.", keys: ["bracket", "loop", "syntax", "generator"] }
+  ],
+  'machine learning': [
+    { q: "What is the difference between supervised and unsupervised learning?", keys: ["labeled", "unlabeled", "target", "group"] },
+    { q: "Explain the bias-variance tradeoff in Machine Learning.", keys: ["overfit", "underfit", "error", "complexity"] }
+  ],
+  'sql': [
+    { q: "What is the difference between INNER JOIN and LEFT JOIN?", keys: ["matching", "all rows", "left table", "null"] },
+    { q: "Explain when you would use GROUP BY vs HAVING.", keys: ["aggregate", "filter", "condition", "where"] }
+  ],
+  'javascript': [
+    { q: "Explain closure in JavaScript.", keys: ["scope", "outer", "inner", "function", "lexical"] },
+    { q: "What is the difference between let, const, and var?", keys: ["block", "reassign", "hoisting", "global"] }
+  ],
+  'react': [
+    { q: "Explain the virtual DOM and how React reconciles changes.", keys: ["diff", "render", "update", "patch", "memory"] },
+    { q: "What is the difference between useEffect and useState?", keys: ["state", "effect", "lifecycle", "cleanup"] }
+  ]
+};
+
+const DEFAULT_QUESTIONS = [
+  { q: "Explain Object-Oriented Programming (OOP) principles.", keys: ["inheritance", "polymorphism", "encapsulation", "abstraction"] },
+  { q: "What is the difference between Git Merge and Git Rebase?", keys: ["history", "commit", "linear", "branch"] },
+  { q: "Explain what REST APIs are and their primary HTTP methods.", keys: ["stateless", "get", "post", "put", "delete", "server"] }
+];
+
+export default function ResultsList({ results, onTrackOpportunity }) {
+  if (!results) return null;
+
+  const { ranked, not_eligible, top_recommendation, message } = results;
+
+  // State for skills gap toggles
+  const [expandedGap, setExpandedGap] = useState({});
+  // State for mock interview active panels
+  const [interviewActive, setInterviewActive] = useState(false);
+  const [interviewAnswers, setInterviewAnswers] = useState({ 0: '', 1: '', 2: '' });
+  const [interviewFeedback, setInterviewFeedback] = useState(null);
+
+  const getMatchLevelClass = (level) => {
+    switch (level?.toLowerCase()) {
+      case 'high':
+        return 'badge-high';
+      case 'medium':
+        return 'badge-medium';
+      case 'low':
+        return 'badge-low';
+      default:
+        return '';
+    }
+  };
+
+  const handleNotifyMe = async (job) => {
+    const email = window.prompt("Enter your email to receive a deadline alert:", "student@campus.edu");
+    if (!email) return;
+
+    try {
+      const result = await sendEmailAlert({
+        email,
+        title: job.title,
+        deadline: job.deadline,
+        organization: job.organization || 'TBD - Placement Cell'
+      });
+      alert(`Success: ${result.message}`);
+    } catch (err) {
+      console.error(err);
+      alert(`Error: ${err.message}`);
+    }
+  };
+
+  const toggleSkillsGap = (id) => {
+    setExpandedGap(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+
+  // Generate 3 mock interview questions based on required skills
+  const getQuestions = (requiredSkills) => {
+    const list = [];
+    if (requiredSkills) {
+      for (const skill of requiredSkills) {
+        const key = skill.toLowerCase().trim();
+        if (SKILL_QUESTIONS[key]) {
+          // Add first available question for this skill
+          list.push(SKILL_QUESTIONS[key][0]);
+        }
+        if (list.length >= 3) break;
+      }
+    }
+    // Fill up with default questions if we don't have 3
+    while (list.length < 3) {
+      const remaining = DEFAULT_QUESTIONS[list.length];
+      if (remaining) {
+        list.push(remaining);
+      } else {
+        break;
+      }
+    }
+    return list.slice(0, 3);
+  };
+
+  const handleGradeInterview = (questions) => {
+    const grades = [];
+    let totalScore = 0;
+
+    questions.forEach((q, idx) => {
+      const answer = (interviewAnswers[idx] || "").toLowerCase().trim();
+      const matched = [];
+      q.keys.forEach(k => {
+        if (answer.includes(k)) {
+          matched.push(k);
+        }
+      });
+      const score = Math.min(10, Math.round((matched.length / q.keys.length) * 10));
+      totalScore += score;
+      grades.push({
+        question: q.q,
+        score,
+        matched,
+        expectedKeys: q.keys
+      });
+    });
+
+    const averageScore = Math.round(totalScore / 3);
+    setInterviewFeedback({
+      grades,
+      averageScore,
+      feedbackMsg: averageScore >= 7 
+        ? "Excellent! You have a solid grasp of these core concepts. Ready for the real interview!" 
+        : averageScore >= 4 
+        ? "Good attempt. Try expanding your answers by including key technical terms." 
+        : "Requires revision. Study the missing key concepts in the curated learning paths."
+    });
+  };
+
+  const resetInterview = () => {
+    setInterviewAnswers({ 0: '', 1: '', 2: '' });
+    setInterviewFeedback(null);
+  };
+
+  return (
+    <div className="results-container">
+      {/* Top Recommendation Highlight Card */}
+      {top_recommendation && (
+        <div className="top-recommendation-card">
+          <div className="top-badge">🏆 TOP MATCH ENGINE</div>
+          
+          <div className="card-header-row">
+            <div>
+              <div className="header-meta">
+                <span className="status-badge status-eligible">✓ Eligible</span>
+                <span className={`match-level-badge ${getMatchLevelClass(top_recommendation.match_level)}`}>
+                  {top_recommendation.match_level} Relevance
+                </span>
+              </div>
+              <h2 className="title">{top_recommendation.title}</h2>
+              <h4 className="organization">🏢 {top_recommendation.organization || 'TBD - Placement Cell'}</h4>
+            </div>
+            <div className="rank-display">#1 Ranked</div>
+          </div>
+
+          <div className="reason-text">
+            <strong>💡 Recommendation Insight & Why Recommended:</strong>
+            <p className="why-paragraph">{top_recommendation.why_recommended}</p>
+          </div>
+
+          <div className="skills-row">
+            {top_recommendation.matched_skills.length > 0 && (
+              <div className="skill-group">
+                <span className="skill-label">✓ Matched Skills:</span>
+                <div className="chips">
+                  {top_recommendation.matched_skills.map((skill, index) => (
+                    <span key={index} className="chip chip-matched">{skill}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {top_recommendation.matched_interest && (
+              <div className="skill-group">
+                <span className="skill-label">🎯 Aligned Interest:</span>
+                <div className="chips">
+                  <span className="chip chip-interest">Domain: {top_recommendation.matched_interest}</span>
+                </div>
+              </div>
+            )}
+
+            {top_recommendation.missing_preferred_skills.length > 0 && (
+              <div className="skill-group">
+                <span className="skill-label">⚠️ Missing Preferred Skills:</span>
+                <div className="chips">
+                  {top_recommendation.missing_preferred_skills.map((skill, index) => (
+                    <span key={index} className="chip chip-missing">{skill}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Interactive Mock Interview & Gap Analyzer Buttons */}
+          <div className="action-buttons-row">
+            <button 
+              type="button" 
+              className="btn btn-secondary btn-action"
+              onClick={() => {
+                setInterviewActive(!interviewActive);
+                resetInterview();
+              }}
+            >
+              {interviewActive ? 'Close Mock Interview ✕' : '🤖 Practice Mock Interview'}
+            </button>
+
+            {top_recommendation.missing_preferred_skills.length > 0 && (
+              <button 
+                type="button" 
+                className="btn btn-secondary btn-action"
+                onClick={() => toggleSkillsGap('top')}
+              >
+                {expandedGap['top'] ? 'Hide Learning Path 🎓' : 'View Learning Path 🎓'}
+              </button>
+            )}
+
+            <button 
+              type="button" 
+              className="btn btn-secondary btn-action btn-alert"
+              onClick={() => handleNotifyMe(top_recommendation)}
+            >
+              🚨 Email Alert
+            </button>
+
+            <button 
+              type="button" 
+              className="btn btn-primary btn-action"
+              onClick={() => onTrackOpportunity(top_recommendation)}
+            >
+              📁 Track Application
+            </button>
+          </div>
+
+          {/* Skills Gap Curated Learning Path */}
+          {expandedGap['top'] && top_recommendation.missing_preferred_skills.length > 0 && (
+            <div className="skills-gap-panel">
+              <h4>🎓 Curated Learning Roadmap:</h4>
+              <p className="panel-desc">Bridge the skills gap with these free learning resources:</p>
+              <div className="learning-links-grid">
+                {top_recommendation.missing_preferred_skills.map((skill, i) => {
+                  const res = CURATED_LEARNING_RESOURCES[skill.toLowerCase().trim()];
+                  return res ? (
+                    <a key={i} href={res.url} target="_blank" rel="noopener noreferrer" className="btn-learning-link">
+                      Learn <strong>{skill}</strong> on {res.name} →
+                    </a>
+                  ) : (
+                    <div key={i} className="btn-learning-placeholder">
+                      Learn {skill} (Search online tutorials)
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Interactive Mock Interview Panel */}
+          {interviewActive && (
+            <div className="mock-interview-panel">
+              <h4>🤖 Practice Mock Interview (Automated Evaluator)</h4>
+              <p className="panel-desc">Answer the questions below. The matching engine evaluates keywords inside your response.</p>
+              
+              {(() => {
+                const questions = getQuestions(top_recommendation.matched_skills.concat(top_recommendation.missing_preferred_skills));
+                return (
+                  <div className="interview-body">
+                    {questions.map((q, idx) => (
+                      <div key={idx} className="interview-question-block">
+                        <label><strong>Question {idx + 1}:</strong> {q.q}</label>
+                        <textarea
+                          placeholder="Type your technical answer here..."
+                          value={interviewAnswers[idx] || ''}
+                          onChange={(e) => setInterviewAnswers(prev => ({ ...prev, [idx]: e.target.value }))}
+                          disabled={!!interviewFeedback}
+                        />
+                      </div>
+                    ))}
+
+                    {!interviewFeedback ? (
+                      <button 
+                        type="button" 
+                        className="btn btn-primary"
+                        onClick={() => handleGradeInterview(questions)}
+                      >
+                        Submit answers & Grade
+                      </button>
+                    ) : (
+                      <div className="feedback-result">
+                        <div className="grade-score-banner">
+                          Score: <span>{interviewFeedback.averageScore} / 10</span>
+                        </div>
+                        <p className="feedback-message"><strong>Evaluator Feedback:</strong> {interviewFeedback.feedbackMsg}</p>
+                        
+                        <div className="individual-grades">
+                          {interviewFeedback.grades.map((g, i) => (
+                            <div key={i} className="q-grade-item">
+                              <p className="q-title"><strong>Q{i+1}:</strong> {g.question}</p>
+                              <p className="q-points">Score: {g.score}/10</p>
+                              <p className="q-keys">Matched keywords: {g.matched.length > 0 ? g.matched.join(', ') : 'None'}</p>
+                              <p className="q-tips">Keywords expected: {g.expectedKeys.join(', ')}</p>
+                            </div>
+                          ))}
+                        </div>
+
+                        <button type="button" className="btn btn-secondary" onClick={resetInterview}>
+                          Retake Interview
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+          )}
+
+          <div className="card-footer-row" style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(37,99,235,0.1)' }}>
+            <span className="deadline-info">📅 Application Deadline: <strong>{top_recommendation.deadline}</strong></span>
+            {top_recommendation.application_link ? (
+              <a href={top_recommendation.application_link} target="_blank" rel="noopener noreferrer" className="btn btn-apply">
+                Apply Online ↗
+              </a>
+            ) : (
+              <button disabled className="btn btn-apply-disabled">
+                Contact Placement Cell 🔗
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Main Recommendations Section */}
+      <div className="recommendations-section">
+        <h3>Shortlisted Eligible Opportunities ({ranked.length})</h3>
+        
+        {ranked.length === 0 ? (
+          <div className="no-matches-alert">
+            <p>{message || "No internships match your eligibility requirements."}</p>
+          </div>
+        ) : (
+          <div className="cards-grid">
+            {ranked.map((internship) => (
+              <div key={internship.rank} className="internship-card">
+                <div className="rank-badge">Rank #{internship.rank}</div>
+                
+                <div className="card-header-row">
+                  <div>
+                    <div className="header-meta">
+                      <span className="status-badge status-eligible">✓ Eligible</span>
+                      <span className={`match-level-badge ${getMatchLevelClass(internship.match_level)}`}>
+                        {internship.match_level}
+                      </span>
+                    </div>
+                    <h3 className="title">{internship.title}</h3>
+                    <h5 className="organization">🏢 {internship.organization || 'TBD - Placement Cell'}</h5>
+                  </div>
+                </div>
+
+                <div className="reason-sentence">
+                  <strong>💡 Reason for Recommendation:</strong>
+                  <p>{internship.reason}</p>
+                </div>
+
+                <div className="skills-row">
+                  {internship.matched_skills.length > 0 && (
+                    <div className="skill-group-mini">
+                      <span className="skill-label-mini">Matched:</span>
+                      <div className="chips-mini">
+                        {internship.matched_skills.map((skill, index) => (
+                          <span key={index} className="chip-mini chip-matched">{skill}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {internship.matched_interest && (
+                    <div className="skill-group-mini">
+                      <span className="skill-label-mini">Interest:</span>
+                      <div className="chips-mini">
+                        <span className="chip-mini chip-interest">{internship.matched_interest}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {internship.missing_preferred_skills.length > 0 && (
+                    <div className="skill-group-mini">
+                      <span className="skill-label-mini">Missing:</span>
+                      <div className="chips-mini">
+                        {internship.missing_preferred_skills.map((skill, index) => (
+                          <span key={index} className="chip-mini chip-missing">{skill}</span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Sub-actions for ranked opportunities */}
+                <div className="ranked-item-actions">
+                  {internship.missing_preferred_skills.length > 0 && (
+                    <button 
+                      type="button" 
+                      className="btn-link-action"
+                      onClick={() => toggleSkillsGap(internship.rank)}
+                    >
+                      {expandedGap[internship.rank] ? 'Hide Curated Learning Path 🎓' : 'View Learning Path 🎓'}
+                    </button>
+                  )}
+
+                  <button 
+                    type="button"
+                    className="btn-link-action action-alert"
+                    onClick={() => handleNotifyMe(internship)}
+                  >
+                    🚨 Email Alert
+                  </button>
+
+                  <button 
+                    type="button"
+                    className="btn-link-action action-track"
+                    onClick={() => onTrackOpportunity(internship)}
+                  >
+                    📁 Track Job
+                  </button>
+                </div>
+
+                {/* Collapsible Learning Path for Ranked Cards */}
+                {expandedGap[internship.rank] && internship.missing_preferred_skills.length > 0 && (
+                  <div className="skills-gap-panel-mini">
+                    <strong>🎓 Free Learning Courses:</strong>
+                    <div className="mini-learning-list">
+                      {internship.missing_preferred_skills.map((skill, i) => {
+                        const res = CURATED_LEARNING_RESOURCES[skill.toLowerCase().trim()];
+                        return res ? (
+                          <a key={i} href={res.url} target="_blank" rel="noopener noreferrer" className="mini-learning-link">
+                            Learn {skill} ({res.name}) →
+                          </a>
+                        ) : (
+                          <span key={i} className="mini-learning-placeholder">
+                            Learn {skill} (Search guides)
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                <div className="card-footer-row">
+                  <span className="deadline-info">📅 Deadline: <strong>{internship.deadline}</strong></span>
+                  {internship.application_link ? (
+                    <a href={internship.application_link} target="_blank" rel="noopener noreferrer" className="btn btn-apply-sm">
+                      Apply ↗
+                    </a>
+                  ) : (
+                    <button disabled className="btn btn-apply-disabled-sm">
+                      Contact Cell 🔗
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Not Eligible Opportunities Section */}
+      {not_eligible && not_eligible.length > 0 && (
+        <div className="not-eligible-section">
+          <h3>Not Eligible / Excluded Positions ({not_eligible.length})</h3>
+          <p className="not-eligible-intro">
+            These positions from the dataset did not pass your program, year, or CGPA checks, or they had 0 skill overlap.
+          </p>
+          <div className="not-eligible-list">
+            {not_eligible.map((item, index) => (
+              <div key={index} className="not-eligible-item">
+                <div className="not-eligible-header">
+                  <h4 className="title">🏢 {item.organization || 'Placement Cell'} — {item.title}</h4>
+                  <span className="status-badge status-ineligible">✕ Ineligible</span>
+                </div>
+                <p className="not-eligible-reason">
+                  <strong>Exclusion Reason:</strong> {item.reason}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
