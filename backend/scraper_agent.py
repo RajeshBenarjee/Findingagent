@@ -5,7 +5,7 @@ import os
 import requests
 from typing import List, Dict, Any, Optional
 
-# Load .env file manually to read GEMINI_API_KEY
+# Load .env file manually to read GROQ_API_KEY
 def load_dotenv():
     env_path = os.path.join(os.path.dirname(__file__), '..', '.env')
     if os.path.exists(env_path):
@@ -14,7 +14,6 @@ def load_dotenv():
                 line = line.strip()
                 if line and not line.startswith('#') and '=' in line:
                     key, val = line.split('=', 1)
-                    # Strip quotes if present
                     val = val.strip().strip('"').strip("'")
                     os.environ[key.strip()] = val
 
@@ -45,17 +44,20 @@ MOCK_CAREER_TEXTS = {
 }
 
 def clean_html_to_text(html: str) -> str:
-    # Strip script and style tags
     html = re.sub(r'<(script|style).*?>.*?</\1>', '', html, flags=re.DOTALL | re.IGNORECASE)
-    # Strip HTML tags
     text = re.sub(r'<[^>]*>', ' ', html)
-    # Normalize whitespace
     text = re.sub(r'\s+', ' ', text).strip()
-    return text[:1500]  # Limit length for Gemini token limits
+    return text[:1500]
 
-def parse_with_gemini(api_key: str, company: str, raw_text: str) -> Optional[Dict[str, Any]]:
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
-    headers = {"Content-Type": "application/json"}
+def parse_with_groq(api_key: str, company: str, raw_text: str) -> Optional[Dict[str, Any]]:
+    """
+    Direct Groq Cloud API call to parse raw careers text using llama-3.1-8b-instant.
+    """
+    url = "https://api.groq.com/openai/v1/chat/completions"
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
     
     prompt = f"""
     You are an Extractor Agent. Analyze this raw text from the careers page of '{company}' and extract the internship opportunity.
@@ -82,20 +84,24 @@ def parse_with_gemini(api_key: str, company: str, raw_text: str) -> Optional[Dic
     """
     
     payload = {
-        "contents": [{"parts": [{"text": prompt}]}]
+        "model": "llama-3.1-8b-instant",
+        "messages": [
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.1,
+        "response_format": {"type": "json_object"}
     }
     
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=8)
         if response.status_code == 200:
             res_data = response.json()
-            text_response = res_data["candidates"][0]["content"]["parts"][0]["text"]
-            match = re.search(r'(\{.*\})', text_response, re.DOTALL)
-            if match:
-                return json.loads(match.group(1))
+            text_response = res_data["choices"][0]["message"]["content"]
             return json.loads(text_response)
+        else:
+            print(f"Groq API error for {company}: Status {response.status_code} - {response.text}")
     except Exception as e:
-        print(f"Gemini call failed for {company}: {e}")
+        print(f"Groq call failed for {company}: {e}")
     return None
 
 def run_multi_agent_scrape(
@@ -107,12 +113,10 @@ def run_multi_agent_scrape(
     logs = []
     scraped_opportunities = []
     
-    # Retrieve API key: first check override, then check environment
-    api_key = api_key_override or os.environ.get("GEMINI_API_KEY")
-    key_source = "Override Input" if api_key_override else ("loaded from .env" if os.environ.get("GEMINI_API_KEY") else "None")
+    api_key = api_key_override or os.environ.get("GROQ_API_KEY")
+    key_source = "Override Input" if api_key_override else ("loaded from .env" if os.environ.get("GROQ_API_KEY") else "None")
     
-    logs.append(f"[Lead Scraper Agent] 🤖 Initializing Multi-Agent scrape. Gemini API Key source: {key_source}")
-    time.sleep(0.05)
+    logs.append(f"[Lead Scraper Agent] 🤖 Initializing Multi-Agent scrape. Groq API Key source: {key_source}")
     
     student_skills_lower = [s.lower().strip() for s in student_skills] if student_skills else []
     
@@ -124,12 +128,12 @@ def run_multi_agent_scrape(
             response = requests.get(custom_url, headers=headers, timeout=6)
             if response.status_code == 200:
                 raw_text = clean_html_to_text(response.text)
-                logs.append(f"[Crawler Agent-Custom] 📄 Successfully downloaded page ({len(response.text)} bytes). Cleaning page text...")
+                logs.append(f"[Crawler Agent-Custom] 📄 Successfully downloaded page. Cleaning page text...")
                 
                 extracted_item = None
                 if api_key:
-                    logs.append(f"[Extractor Agent] 🧠 Querying Gemini LLM to parse HTML contents of: {custom_url}...")
-                    extracted_item = parse_with_gemini(api_key, "Custom URL", raw_text)
+                    logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse HTML contents of: {custom_url}...")
+                    extracted_item = parse_with_groq(api_key, "Custom URL", raw_text)
                     
                 if not extracted_item:
                     logs.append(f"[Extractor Agent] ⚠️ (Fallback Mode) Could not parse custom URL. Creating generic listing.")
@@ -165,23 +169,20 @@ def run_multi_agent_scrape(
                 continue
             
             logs.append(f"[Crawler Agent-{idx}] 🌐 Navigating to career portal for: {company}...")
-            time.sleep(0.02)
             
             raw_text = MOCK_CAREER_TEXTS[company]
             extracted_item = None
             
             if api_key:
-                logs.append(f"[Extractor Agent] 🧠 Querying Gemini LLM to parse raw text of: {company}...")
-                extracted_item = parse_with_gemini(api_key, company, raw_text)
+                logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse raw text of: {company}...")
+                extracted_item = parse_with_groq(api_key, company, raw_text)
                 
             if not extracted_item:
-                # Find the preseeded fallback item matching this company
                 from scraper_agent import FALLBACK_SCRAPED
                 fallback_matches = [item for item in FALLBACK_SCRAPED if company.lower() in item["organization"].lower() or company.lower() in item["title"].lower()]
                 if fallback_matches:
                     extracted_item = fallback_matches[0]
                 else:
-                    # Construct generic mock
                     extracted_item = {
                         "title": f"{company} Software Intern",
                         "organization": company,
@@ -201,9 +202,7 @@ def run_multi_agent_scrape(
                     }
                     
             logs.append(f"[Validator Agent] ⚡ Checking skills alignment with student profile...")
-            time.sleep(0.02)
             
-            # Populate matched / preferred skills
             req_skills = extracted_item.get("required_skills", [])
             matched = [s for s in req_skills if s.lower().strip() in student_skills_lower]
             preferred = [s for s in req_skills if s.lower().strip() not in student_skills_lower]
