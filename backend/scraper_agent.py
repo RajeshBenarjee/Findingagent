@@ -25,10 +25,10 @@ load_dotenv()
 
 # Pre-seeded raw careers page text for 20 companies
 MOCK_CAREER_TEXTS = {
-    "Google": "Google Software Engineering Internship 2027. Location: Bangalore. Duration: 8 weeks. Requires Python, Go, and Algorithms. Candidates must be in B.Tech CSE III or IV year with minimum CGPA 8.0. Starts 10 Oct. Application instructions: Apply on Google Careers portal.",
-    "Microsoft": "Microsoft Data Science Intern. Duration: 12 weeks. Requires Python, SQL, and Machine Learning. Target programme: B.Tech CSE/IT, III year. CGPA ≥ 8.0. Starts 15 Oct. Instructions: Submit CV via MS Careers portal.",
-    "Meta": "Meta Frontend Engineer Intern. Duration: 8 weeks. Requires JavaScript, React, and CSS. Open to B.Tech II and III year. No CGPA limit. Starts 20 Oct. Instructions: Register on Meta Careers portal.",
-    "Amazon": "Amazon Cloud Developer Intern. Duration: 8 weeks. Requires AWS, Linux, and Python. Open to B.Tech III/IV year. CGPA ≥ 7.0. Starts 05 Oct. Instructions: Apply through Amazon Jobs.",
+    "Google": "Google Software Engineering Internship 2027. Location: Bangalore. Duration: 8 weeks. Requires Python, Go, and Algorithms. Candidates must be in B.Tech CSE III or IV year with minimum CGPA 8.0. Starts 10 Oct. Application instructions: Apply on Google Careers portal. Also hiring Google Product Management Intern. Duration: 8 weeks. Requires Python, Excel, and Product Strategy. Candidates must be in B.Tech III or IV year with minimum CGPA 7.5. Starts 15 Oct. Application instructions: Apply on Google Careers portal.",
+    "Microsoft": "Microsoft Data Science Intern. Duration: 12 weeks. Requires Python, SQL, and Machine Learning. Target programme: B.Tech CSE/IT, III year. CGPA ≥ 8.0. Starts 15 Oct. Instructions: Submit CV via MS Careers portal. Also hiring Microsoft Frontend Developer Intern. Duration: 8 weeks. Requires React, HTML, and CSS. Open to B.Tech II and III year. CGPA >= 8.0. Starts 12 Oct. Instructions: Apply on MS Careers portal.",
+    "Meta": "Meta Frontend Engineer Intern. Duration: 8 weeks. Requires JavaScript, React, and CSS. Open to B.Tech II and III year. No CGPA limit. Starts 20 Oct. Instructions: Register on Meta Careers portal. Also hiring Meta Production Engineer Intern. Duration: 8 weeks. Requires Linux, Python, and Git. B.Tech III year. CGPA >= 7.5. Starts 25 Oct. Instructions: Register on Meta Careers portal.",
+    "Amazon": "Amazon Cloud Developer Intern. Duration: 8 weeks. Requires AWS, Linux, and Python. Open to B.Tech III/IV year. CGPA ≥ 7.0. Starts 05 Oct. Instructions: Apply through Amazon Jobs. Also hiring Amazon Software Dev Intern. Duration: 8 weeks. Requires Java, C++, and Git. B.Tech III/IV year. CGPA >= 7.5. Starts 08 Oct. Instructions: Apply through Amazon Jobs.",
     "Apple": "Apple iOS Development Intern. Duration: 8 weeks. Requires Swift, iOS, and Xcode. B.Tech III year. CGPA ≥ 8.0. Starts 12 Oct. Instructions: Send application to ios-intern@apple.com.",
     "Netflix": "Netflix UI/UX Design Intern. Duration: 6 weeks. Requires Figma and Wireframing. B.Tech II/III year. No CGPA limit. Starts 18 Oct. Instructions: Submit portfolio on Netflix jobs site.",
     "Stripe": "Stripe Backend Engineer Intern. Duration: 8 weeks. Requires Ruby, Python, and SQL. B.Tech III year. CGPA ≥ 8.0. Starts 01 Oct. Instructions: Apply on Stripe Jobs board.",
@@ -67,6 +67,23 @@ FALLBACK_SCRAPED = [
         "application_instructions": "Apply on Google Careers portal."
     },
     {
+        "title": "Google Product Management Intern",
+        "organization": "Google",
+        "domain": "Product Strategy",
+        "required_skills": ["Python", "Excel", "Product Strategy"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 7.5
+        },
+        "duration": "8 weeks",
+        "deadline": "25 Sept",
+        "application_link": "https://careers.google.com/jobs",
+        "status": "Open",
+        "start_date": "15 Oct",
+        "application_instructions": "Apply on Google Careers portal."
+    },
+    {
         "title": "Microsoft Data Science Intern",
         "organization": "Microsoft",
         "domain": "Data Science",
@@ -82,6 +99,23 @@ FALLBACK_SCRAPED = [
         "status": "Open",
         "start_date": "15 Oct",
         "application_instructions": "Submit CV via MS Careers portal."
+    },
+    {
+        "title": "Microsoft Frontend Developer Intern",
+        "organization": "Microsoft",
+        "domain": "Web Development",
+        "required_skills": ["React", "HTML", "CSS"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["II", "III"],
+            "min_cgpa": 8.0
+        },
+        "duration": "8 weeks",
+        "deadline": "20 Sept",
+        "application_link": "https://careers.microsoft.com",
+        "status": "Open",
+        "start_date": "12 Oct",
+        "application_instructions": "Apply on MS Careers portal."
     },
     {
         "title": "Meta Frontend Engineer Intern",
@@ -101,6 +135,23 @@ FALLBACK_SCRAPED = [
         "application_instructions": "Register on Meta Careers portal."
     },
     {
+        "title": "Meta Production Engineer Intern",
+        "organization": "Meta",
+        "domain": "Software Engineering",
+        "required_skills": ["Linux", "Python", "Git"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III"],
+            "min_cgpa": 7.5
+        },
+        "duration": "8 weeks",
+        "deadline": "01 Oct",
+        "application_link": "https://meta.com/careers",
+        "status": "Open",
+        "start_date": "25 Oct",
+        "application_instructions": "Register on Meta Careers portal."
+    },
+    {
         "title": "Amazon Cloud Developer Intern",
         "organization": "Amazon",
         "domain": "Cloud Computing",
@@ -115,6 +166,23 @@ FALLBACK_SCRAPED = [
         "application_link": "https://amazon.jobs",
         "status": "Open",
         "start_date": "05 Oct",
+        "application_instructions": "Apply through Amazon Jobs."
+    },
+    {
+        "title": "Amazon Software Dev Intern",
+        "organization": "Amazon",
+        "domain": "Software Engineering",
+        "required_skills": ["Java", "C++", "Git"],
+        "eligibility": {
+            "programme": "B.Tech",
+            "years": ["III", "IV"],
+            "min_cgpa": 7.5
+        },
+        "duration": "8 weeks",
+        "deadline": "18 Sept",
+        "application_link": "https://amazon.jobs",
+        "status": "Open",
+        "start_date": "08 Oct",
         "application_instructions": "Apply through Amazon Jobs."
     },
     {
@@ -410,7 +478,7 @@ def clean_and_parse_json(text_response: str) -> Optional[Dict[str, Any]]:
         print(f"JSON parsing error: {e}")
         return None
 
-def parse_with_groq(api_key: str, company: str, raw_text: str) -> Optional[Dict[str, Any]]:
+def parse_with_groq(api_key: str, company: str, raw_text: str) -> Optional[List[Dict[str, Any]]]:
     url = "https://api.groq.com/openai/v1/chat/completions"
     headers = {
         "Authorization": f"Bearer {api_key}",
@@ -418,24 +486,28 @@ def parse_with_groq(api_key: str, company: str, raw_text: str) -> Optional[Dict[
     }
     
     prompt = f"""
-    You are an Extractor Agent. Analyze this raw text from the careers page of '{company}' and extract the internship opportunity.
+    You are an Extractor Agent. Analyze this raw text from the careers page of '{company}' and extract all the internship opportunities listed.
     Return JSON format only, matching this structure EXACTLY:
     {{
-      "title": "Internship Title",
-      "organization": "Company Name",
-      "domain": "Domain Name",
-      "required_skills": ["Skill1", "Skill2"],
-      "eligibility": {{
-        "programme": "B.Tech",
-        "years": ["II", "III", "IV"],
-        "min_cgpa": 7.5
-      }},
-      "duration": "8 weeks",
-      "deadline": "30 Sept",
-      "application_link": "https://company.com/jobs",
-      "status": "Open",
-      "start_date": "10 Oct",
-      "application_instructions": "Instructions text"
+      "opportunities": [
+        {{
+          "title": "Internship Title",
+          "organization": "Company Name",
+          "domain": "Domain Name",
+          "required_skills": ["Skill1", "Skill2"],
+          "eligibility": {{
+            "programme": "B.Tech",
+            "years": ["II", "III", "IV"],
+            "min_cgpa": 7.5
+          }},
+          "duration": "8 weeks",
+          "deadline": "30 Sept",
+          "application_link": "https://company.com/jobs",
+          "status": "Open",
+          "start_date": "10 Oct",
+          "application_instructions": "Instructions text"
+        }}
+      ]
     }}
     Do not add markdown wrappers around JSON. Simply return raw JSON.
     Text: {raw_text}
@@ -455,7 +527,14 @@ def parse_with_groq(api_key: str, company: str, raw_text: str) -> Optional[Dict[
         if response.status_code == 200:
             res_data = response.json()
             text_response = res_data["choices"][0]["message"]["content"]
-            return clean_and_parse_json(text_response)
+            parsed = clean_and_parse_json(text_response)
+            if parsed:
+                if isinstance(parsed, dict) and "opportunities" in parsed:
+                    return parsed["opportunities"]
+                elif isinstance(parsed, list):
+                    return parsed
+                elif isinstance(parsed, dict):
+                    return [parsed]
         else:
             print(f"Groq API error for {company}: Status {response.status_code} - {response.text}")
     except Exception as e:
@@ -503,15 +582,15 @@ def run_multi_agent_scrape(
         except Exception as e:
             logs.append(f"[Crawler Agent-Custom] ⚠️ Connection failed ({str(e)}). Activating Secure Headless Crawler proxy...")
             
-        extracted_item = None
+        extracted_items = None
         
         # If fetch succeeded and we have a valid key, run Groq
         if fetch_success and api_key:
             logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse HTML contents of: {custom_url}...")
-            extracted_item = parse_with_groq(api_key, "Custom URL", raw_text)
+            extracted_items = parse_with_groq(api_key, "Custom URL", raw_text)
             
         # Fallback for custom URL: generate a highly realistic parsed object
-        if not extracted_item:
+        if not extracted_items:
             # Extract domain name if possible for realism
             domain = "Custom Portal"
             domain_match = re.search(r'https?://(?:www\.)?([^/]+)', custom_url)
@@ -519,7 +598,7 @@ def run_multi_agent_scrape(
                 domain = domain_match.group(1).split('.')[0].capitalize()
                 
             logs.append(f"[Extractor Agent] 🤖 (Smart Mode) Parsing URL text using local NLP engine...")
-            extracted_item = {
+            extracted_items = [{
                 "title": f"Software Engineering Intern",
                 "organization": f"{domain} Corporation",
                 "domain": "Software Engineering",
@@ -535,10 +614,20 @@ def run_multi_agent_scrape(
                 "status": "Open",
                 "start_date": "15 Oct",
                 "application_instructions": f"Apply directly on the {domain} portal via the provided link."
-            }
+            }]
         
-        scraped_opportunities.append(extracted_item)
-        logs.append(f"[Validator Agent] ✅ Validated custom opportunity: {extracted_item['title']}")
+        for item in extracted_items:
+            req_skills = item.get("required_skills", [])
+            matched = [s for s in req_skills if s.lower().strip() in student_skills_lower]
+            preferred = [s for s in req_skills if s.lower().strip() not in student_skills_lower]
+            
+            item_copy = dict(item)
+            item_copy["matched_skills"] = matched
+            item_copy["preferred_skills"] = preferred
+            item_copy["status"] = "Open"
+            
+            scraped_opportunities.append(item_copy)
+            logs.append(f"[Validator Agent] ✅ Validated custom opportunity: {item_copy['title']}")
 
     # Crawl selected companies
     if selected_companies:
@@ -549,14 +638,14 @@ def run_multi_agent_scrape(
             logs.append(f"[Crawler Agent-{idx}] 🌐 Navigating to career portal for: {company}...")
             
             raw_text = MOCK_CAREER_TEXTS[company]
-            extracted_item = None
+            extracted_items = None
             
             if api_key:
                 logs.append(f"[Extractor Agent] 🧠 Querying Groq Cloud API to parse raw text of: {company}...")
-                extracted_item = parse_with_groq(api_key, company, raw_text)
+                extracted_items = parse_with_groq(api_key, company, raw_text)
                 
             # If Groq failed, was rate limited, or API key is missing
-            if not extracted_item:
+            if not extracted_items:
                 if api_key:
                     logs.append(f"[Extractor Agent] ⚠️ Live Groq parsing failed. Activating local NLP extraction fallback...")
                 else:
@@ -564,9 +653,9 @@ def run_multi_agent_scrape(
                     
                 fallback_matches = [item for item in FALLBACK_SCRAPED if company.lower() in item["organization"].lower() or company.lower() in item["title"].lower()]
                 if fallback_matches:
-                    extracted_item = fallback_matches[0]
+                    extracted_items = fallback_matches
                 else:
-                    extracted_item = {
+                    extracted_items = [{
                         "title": f"{company} Software Intern",
                         "organization": company,
                         "domain": "Software Engineering",
@@ -582,22 +671,23 @@ def run_multi_agent_scrape(
                         "status": "Open",
                         "start_date": "10 Oct",
                         "application_instructions": f"Apply on {company} jobs site."
-                    }
+                    }]
                     
-            logs.append(f"[Validator Agent] ⚡ Checking skills alignment with student profile...")
-            
-            req_skills = extracted_item.get("required_skills", [])
-            matched = [s for s in req_skills if s.lower().strip() in student_skills_lower]
-            preferred = [s for s in req_skills if s.lower().strip() not in student_skills_lower]
-            
-            # Create a copy to prevent mutation
-            item_copy = dict(extracted_item)
-            item_copy["matched_skills"] = matched
-            item_copy["preferred_skills"] = preferred
-            item_copy["status"] = "Open"
-            
-            scraped_opportunities.append(item_copy)
-            logs.append(f"[Lead Scraper Agent] ✅ Successfully parsed: {item_copy['title']} (Matched: {len(matched)}, Preferred: {len(preferred)})")
+            for item in extracted_items:
+                logs.append(f"[Validator Agent] ⚡ Checking skills alignment with student profile for: {item.get('title')}...")
+                
+                req_skills = item.get("required_skills", [])
+                matched = [s for s in req_skills if s.lower().strip() in student_skills_lower]
+                preferred = [s for s in req_skills if s.lower().strip() not in student_skills_lower]
+                
+                # Create a copy to prevent mutation
+                item_copy = dict(item)
+                item_copy["matched_skills"] = matched
+                item_copy["preferred_skills"] = preferred
+                item_copy["status"] = "Open"
+                
+                scraped_opportunities.append(item_copy)
+                logs.append(f"[Lead Scraper Agent] ✅ Successfully parsed: {item_copy['title']} (Matched: {len(matched)}, Preferred: {len(preferred)})")
             
     logs.append(f"[Lead Scraper Agent] 🎉 Complete! Processed {len(scraped_opportunities)} opportunities. Ready to import.")
     
