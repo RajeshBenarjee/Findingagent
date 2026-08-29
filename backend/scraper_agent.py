@@ -463,7 +463,7 @@ def clean_html_to_text(html: str) -> str:
     html = re.sub(r'<(script|style).*?>.*?</\1>', '', html, flags=re.DOTALL | re.IGNORECASE)
     text = re.sub(r'<[^>]*>', ' ', html)
     text = re.sub(r'\s+', ' ', text).strip()
-    return text[:1500]
+    return text[:25000]
 
 def clean_and_parse_json(text_response: str) -> Optional[Dict[str, Any]]:
     # Strip markdown wrappers (like ```json ... ```) if present
