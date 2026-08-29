@@ -727,6 +727,8 @@ def run_multi_agent_scrape(
             if company not in MOCK_CAREER_TEXTS:
                 continue
             
+            extracted_items = None
+            
             # Live scraper query for Amazon
             if company.lower() == "amazon":
                 logs.append(f"[Crawler Agent-{idx}] 🌐 Querying live Amazon Careers JSON API...")
