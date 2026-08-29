@@ -104,3 +104,64 @@ The system parses the internship dataset directly from `data/internships.json`. 
 ```
 
 The matching server automatically loads the updated file upon startup. If you are running the backend with `--reload`, it will automatically restart and parse the new data files.
+
+---
+
+## Architectural & Functional Deep Dive
+
+This section provides an end-to-end explanation of the project's internal data flows, algorithms, and modules.
+
+### 1. Executive System Flow
+
+```text
+Student Profile Input ────► [FastAPI Router] ────► [Matching Engine (agent.py)]
+                                                          │
+                                                          ├──► Checks Eligibility (Program, Year, CGPA)
+                                                          ├──► Checks Constraints (Duration, Start Date)
+                                                          └──► Computes Soft Score (Skill/Domain match)
+                                                                  │
+                                                                  ▼
+HTML Client ◄────────────── [JSON Response] ◄─────────────── Sorts & Formats
+```
+
+### 2. Matching Engine Algorithm (`backend/agent.py`)
+
+The core matching algorithm is deterministic and operates in two stages for every internship in the pool:
+
+#### A. Hard Constraints Evaluation (Eligibility Filters)
+An opportunity is immediately disqualified if:
+1. **Status:** The internship status is `Closed` or `Applications Closed`.
+2. **Academic Programme:** The student's academic programme (e.g., `"B.Tech CSE"`) does not match the required programme.
+3. **Year of Study:** The student's year of study (e.g., `"III"`) is not in the allowed years list (e.g., `["III", "IV"]`).
+4. **CGPA:** The student's CGPA falls below `min_cgpa`.
+5. **Duration:** The internship duration exceeds the student's `max_duration_weeks` constraint.
+6. **Start Date:** The internship start date occurs before the student's availability date (i.e. `preferred_start_date`).
+
+#### B. Soft Matches & Relevance Scoring
+If all eligibility filters pass, the engine assigns a relevance score:
+* **Exact Skill Match (+2 pts):** The student possesses the exact skill required.
+* **Partial Skill Match (+1 pt):** Substring overlap between student skills and required skills.
+* **Domain Match (+2 pts):** The internship domain (e.g., `"AI/ML"`) matches one of the student's areas of interest.
+* **Disqualification Fallback:** If the total score is `0` (meaning there's absolutely no skill overlap and no domain overlap), the internship is marked as ineligible.
+
+#### C. Shortlist Reassessment Table
+If a previously high-ranked opportunity becomes unavailable (e.g. `ML Intern` has status `"Closed"` or `Data Analytics Intern` has its minimum CGPA criteria updated to `8.5` while the student has `8.2`), the system logs it in a `transition_table` as `Removed` along with the specific reason, and flags alternatives under the decision `"Reconsider"`.
+
+---
+
+### 3. Core Modules & Endpoints (`backend/main.py`)
+
+* **`/api/recommend` (POST):** Accepts a `StudentProfile` JSON body and returns a list of eligible ranked recommendations, ineligible positions with explanations, a featured top recommendation, and the shortlist reassessment transition table.
+* **`/api/parse-resume` (POST):** Receives a multipart PDF upload, extracts the text using `pypdf`, and checks the content for keywords in `SKILL_KEYWORDS` to auto-populate the client-side profile.
+* **`/api/alert` (POST):** Triggers a deadline alert. Attempts a real SMTP email transmission if `SMTP_USERNAME` and `SMTP_PASSWORD` environment variables are configured. Otherwise, writes a copy to `data/last_alert_email.txt` for simulation verification.
+* **`/api/scrape` (POST):** Triggers the Multi-Agent scraper to crawl company pages or a custom URL. Uses Groq API (`llama-3.1-8b-instant`) to parse raw text into structured JSON. If the API key is not configured, it runs in **Smart Local NLP mode** with pre-seeded fallbacks.
+* **`/api/import-scraped` (POST):** Merges scraped internship opportunities back into `data/internships.json`.
+
+---
+
+### 4. Interactive Frontend Utilities (`frontend/src/`)
+
+* **What-If Eligibility Simulator (`App.jsx`):** Bound to real-time inputs. Adjusting parameter sliders (like CGPA) automatically debounces and submits API queries, updating the list dynamically.
+* **Practice Mock Interview (`ResultsList.jsx`):** Generates 3 technical questions based on the required skills of the top recommended role. Analyzes user answers against expected keywords and outputs a grade out of 10.
+* **Curated Learning Roadmaps (`ResultsList.jsx`):** Links students to free learning resources (e.g. Kaggle, Fast.ai, MDN) for skills required by the opportunity but missing from the student's profile.
+* **Kanban Tracker (`App.jsx`):** A column-based board (`Interested`, `Applied`, `Interviewing`, `Offers`) for managing application states, persisted via local storage.
