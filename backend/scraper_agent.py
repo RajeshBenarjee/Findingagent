@@ -91,7 +91,7 @@ FALLBACK_SCRAPED = [
         "eligibility": {
             "programme": "B.Tech",
             "years": ["II", "III"],
-            "min_cgpa": null
+            "min_cgpa": None
         },
         "duration": "8 weeks",
         "deadline": "05 Oct",
@@ -142,7 +142,7 @@ FALLBACK_SCRAPED = [
         "eligibility": {
             "programme": "B.Tech",
             "years": ["II", "III"],
-            "min_cgpa": null
+            "min_cgpa": None
         },
         "duration": "6 weeks",
         "deadline": "19 Sept",

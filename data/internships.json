@@ -3,10 +3,16 @@
     "title": "ML Intern",
     "organization": "TBD - Placement Cell",
     "domain": "AI/ML",
-    "required_skills": ["Python", "Machine Learning"],
+    "required_skills": [
+      "Python",
+      "Machine Learning"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["III", "IV"],
+      "years": [
+        "III",
+        "IV"
+      ],
       "min_cgpa": 7.5
     },
     "duration": "8 weeks",
@@ -20,10 +26,17 @@
     "title": "Web Developer Intern",
     "organization": "TBD - Placement Cell",
     "domain": "Web Development",
-    "required_skills": ["HTML", "CSS", "JavaScript"],
+    "required_skills": [
+      "HTML",
+      "CSS",
+      "JavaScript"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["II", "III"],
+      "years": [
+        "II",
+        "III"
+      ],
       "min_cgpa": null
     },
     "duration": "12 weeks",
@@ -37,10 +50,16 @@
     "title": "Data Analytics Intern",
     "organization": "TBD - Placement Cell",
     "domain": "Data Science",
-    "required_skills": ["Python", "SQL"],
+    "required_skills": [
+      "Python",
+      "SQL"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["III", "IV"],
+      "years": [
+        "III",
+        "IV"
+      ],
       "min_cgpa": 8.5
     },
     "duration": "8 weeks",
@@ -54,10 +73,16 @@
     "title": "Cloud Intern",
     "organization": "TBD - Placement Cell",
     "domain": "Cloud Computing",
-    "required_skills": ["AWS", "Linux"],
+    "required_skills": [
+      "AWS",
+      "Linux"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["III", "IV"],
+      "years": [
+        "III",
+        "IV"
+      ],
       "min_cgpa": null
     },
     "duration": "8 weeks",
@@ -71,10 +96,17 @@
     "title": "Python Developer Intern",
     "organization": "PyCode Solutions",
     "domain": "Web Development",
-    "required_skills": ["Python", "Git", "SQL"],
+    "required_skills": [
+      "Python",
+      "Git",
+      "SQL"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["II", "III"],
+      "years": [
+        "II",
+        "III"
+      ],
       "min_cgpa": 7.0
     },
     "duration": "8 weeks",
@@ -88,10 +120,17 @@
     "title": "UI/UX Design Intern",
     "organization": "CreativeFlow Labs",
     "domain": "UI/UX Design",
-    "required_skills": ["Figma", "Adobe XD", "Wireframing"],
+    "required_skills": [
+      "Figma",
+      "Adobe XD",
+      "Wireframing"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["II", "III"],
+      "years": [
+        "II",
+        "III"
+      ],
       "min_cgpa": null
     },
     "duration": "6 weeks",
@@ -105,10 +144,17 @@
     "title": "Deep Learning Specialist Intern",
     "organization": "NeuroCore AI Labs",
     "domain": "AI/ML",
-    "required_skills": ["Python", "PyTorch", "Deep Learning"],
+    "required_skills": [
+      "Python",
+      "PyTorch",
+      "Deep Learning"
+    ],
     "eligibility": {
       "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
+      "years": [
+        "III",
+        "IV"
+      ],
       "min_cgpa": 8.5
     },
     "duration": "6 Months",
@@ -122,10 +168,18 @@
     "title": "DevOps Engineer Intern",
     "organization": "CloudScale Solutions",
     "domain": "Cloud Computing",
-    "required_skills": ["Docker", "Kubernetes", "Linux", "AWS"],
+    "required_skills": [
+      "Docker",
+      "Kubernetes",
+      "Linux",
+      "AWS"
+    ],
     "eligibility": {
       "programme": "B.Tech CSE",
-      "years": ["III", "IV"],
+      "years": [
+        "III",
+        "IV"
+      ],
       "min_cgpa": 8.0
     },
     "duration": "6 Months",
@@ -139,10 +193,18 @@
     "title": "iOS Developer Intern",
     "organization": "AppPulse Media",
     "domain": "Mobile Development",
-    "required_skills": ["Swift", "iOS", "Xcode"],
+    "required_skills": [
+      "Swift",
+      "iOS",
+      "Xcode"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["II", "III", "IV"],
+      "years": [
+        "II",
+        "III",
+        "IV"
+      ],
       "min_cgpa": 7.2
     },
     "duration": "3 Months",
@@ -156,10 +218,18 @@
     "title": "Android Developer Intern",
     "organization": "DroidCraft Inc",
     "domain": "Mobile Development",
-    "required_skills": ["Kotlin", "Android Studio", "Java"],
+    "required_skills": [
+      "Kotlin",
+      "Android Studio",
+      "Java"
+    ],
     "eligibility": {
       "programme": "B.Tech",
-      "years": ["II", "III", "IV"],
+      "years": [
+        "II",
+        "III",
+        "IV"
+      ],
       "min_cgpa": 7.2
     },
     "duration": "3 Months",
@@ -168,5 +238,100 @@
     "status": "Open",
     "start_date": "18 Sept",
     "application_instructions": "Upload Kotlin project sample to DroidCraft portal."
+  },
+  {
+    "title": "Google Software Engineering Intern",
+    "organization": "Google",
+    "domain": "Software Engineering",
+    "required_skills": [
+      "Python",
+      "Go",
+      "Algorithms"
+    ],
+    "eligibility": {
+      "programme": "B.Tech",
+      "years": [
+        "III",
+        "IV"
+      ],
+      "min_cgpa": 8.0
+    },
+    "duration": "8 weeks",
+    "deadline": "30 Sept",
+    "application_link": "https://careers.google.com/jobs",
+    "status": "Open",
+    "start_date": "10 Oct",
+    "application_instructions": "Apply on Google Careers portal."
+  },
+  {
+    "title": "Microsoft Data Science Intern",
+    "organization": "Microsoft",
+    "domain": "Data Science",
+    "required_skills": [
+      "Python",
+      "SQL",
+      "Machine Learning"
+    ],
+    "eligibility": {
+      "programme": "B.Tech",
+      "years": [
+        "III"
+      ],
+      "min_cgpa": 8.0
+    },
+    "duration": "12 weeks",
+    "deadline": "28 Sept",
+    "application_link": "https://careers.microsoft.com",
+    "status": "Open",
+    "start_date": "15 Oct",
+    "application_instructions": "Submit CV via MS Careers portal."
+  },
+  {
+    "title": "Meta Frontend Engineer Intern",
+    "organization": "Meta",
+    "domain": "Web Development",
+    "required_skills": [
+      "JavaScript",
+      "React",
+      "CSS"
+    ],
+    "eligibility": {
+      "programme": "B.Tech",
+      "years": [
+        "II",
+        "III"
+      ],
+      "min_cgpa": null
+    },
+    "duration": "8 weeks",
+    "deadline": "05 Oct",
+    "application_link": "https://meta.com/careers",
+    "status": "Open",
+    "start_date": "20 Oct",
+    "application_instructions": "Register on Meta Careers portal."
+  },
+  {
+    "title": "Amazon Cloud Developer Intern",
+    "organization": "Amazon",
+    "domain": "Cloud Computing",
+    "required_skills": [
+      "AWS",
+      "Linux",
+      "Python"
+    ],
+    "eligibility": {
+      "programme": "B.Tech",
+      "years": [
+        "III",
+        "IV"
+      ],
+      "min_cgpa": 7.0
+    },
+    "duration": "8 weeks",
+    "deadline": "22 Sept",
+    "application_link": "https://amazon.jobs",
+    "status": "Open",
+    "start_date": "05 Oct",
+    "application_instructions": "Apply through Amazon Jobs."
   }
 ]
