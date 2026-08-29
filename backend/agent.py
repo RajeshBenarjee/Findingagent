@@ -24,7 +24,6 @@ def parse_duration_to_weeks(duration_str: str) -> float:
     # Match months, e.g. "6 Months", "3 month"
     match_months = re.search(r'(\d+)\s*month', duration_str)
     if match_months:
-        # 1 Month ≈ 4.33 weeks
         return float(match_months.group(1)) * 4.33
         
     return 0.0
@@ -107,11 +106,11 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
                 reasons_ineligible.append(f"duration {item.duration} exceeds maximum allowed of {student.max_duration_weeks} weeks")
 
         # 6. Constraint check: Start Date relative to exams (Change 2)
-        if item.start_date and student.exams_end_date:
+        if item.start_date and student.preferred_start_date:
             item_days = date_to_days(item.start_date)
-            exams_days = date_to_days(student.exams_end_date)
+            exams_days = date_to_days(student.preferred_start_date)
             if item_days > 0 and exams_days > 0 and item_days < exams_days:
-                reasons_ineligible.append(f"starts on {item.start_date}, which is before exams end on {student.exams_end_date}")
+                reasons_ineligible.append(f"starts on {item.start_date}, which is before availability start date {student.preferred_start_date}")
 
         # If not eligible due to any filters
         if reasons_ineligible:
@@ -223,7 +222,9 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
             deadline=item.deadline,
             application_link=item.application_link,
             duration=item.duration,
-            start_date=item.start_date
+            start_date=item.start_date,
+            status=item.status or "Open",
+            application_instructions=item.application_instructions or "Apply via application link or contact placement cell."
         ))
 
     # 7. Construct Reassessment Transition Table
@@ -274,7 +275,7 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
             f"The '{first_item.title}' role at {first_item.organization or 'Placement Cell'} is our new top recommendation for you "
             f"with a {first_item.match_level} match level. This internship strongly aligns with your skills "
             f"and interests, satisfies your max duration constraint ({first_item.duration}), and starts on {first_item.start_date or 'TBD'} "
-            f"which is after your semester examinations end on {student.exams_end_date}."
+            f"which is on or after your preferred start date of {student.preferred_start_date}."
         )
         
         top_rec = TopRecommendation(
@@ -291,13 +292,15 @@ def get_recommendations(student: StudentProfile, internships: List[InternshipOpp
             application_link=first_item.application_link,
             duration=first_item.duration,
             start_date=first_item.start_date,
+            status=first_item.status or "Open",
+            application_instructions=first_item.application_instructions or "Apply via application link or contact placement cell.",
             why_recommended=why_para
         )
 
     # Determine top level message if no recommendations matched
     message = None
     if not ranked_recommendations:
-        message = "No Suitable Opportunity Found"
+        message = "NO Opportunities Found"
 
     # Determine report metrics
     top_changed = "Yes" if ml_intern_removed else "No"

@@ -493,6 +493,14 @@ export default function ResultsList({ results, onTrackOpportunity }) {
             </div>
           )}
 
+          <div className="card-instructions-row" style={{ marginTop: '1rem', padding: '0.75rem', backgroundColor: '#f8fafc', borderRadius: '6px', border: '1px solid #cbd5e1' }}>
+            <p style={{ margin: 0, fontSize: '0.85rem' }}><strong>Application Instructions:</strong> {top_recommendation.application_instructions}</p>
+          </div>
+          
+          <div className="card-status-row" style={{ marginTop: '0.5rem', marginBottom: '1rem', display: 'flex', gap: '1rem', fontSize: '0.85rem' }}>
+            <span>Current Application Status: <strong className={`status-pill status-${top_recommendation.status.toLowerCase().replace(/ /g, '-')}`}>{top_recommendation.status}</strong></span>
+          </div>
+
           <div className="card-footer-row" style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid rgba(37,99,235,0.1)' }}>
             <span className="deadline-info">📅 Application Deadline: <strong>{top_recommendation.deadline}</strong></span>
             {top_recommendation.application_link ? (
@@ -513,8 +521,13 @@ export default function ResultsList({ results, onTrackOpportunity }) {
         <h3>Shortlisted Eligible Opportunities ({ranked.length})</h3>
         
         {ranked.length === 0 ? (
-          <div className="no-matches-alert">
-            <p>{message || "No internships match your eligibility requirements."}</p>
+          <div className="no-matches-alert" style={{ textAlign: 'center', padding: '3rem', backgroundColor: '#fef2f2', border: '2px dashed #fca5a5', borderRadius: '12px', marginBottom: '2rem' }}>
+            <h2 style={{ color: '#b91c1c', fontSize: '2.25rem', fontWeight: '900', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              NO Opportunities Found
+            </h2>
+            <p style={{ color: '#7f1d1d', marginTop: '0.5rem', fontWeight: '700', fontSize: '1.05rem' }}>
+              {message || "No internships match your eligibility requirements."}
+            </p>
           </div>
         ) : (
           <div className="cards-grid">
@@ -623,6 +636,14 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                   </div>
                 )}
 
+                <div className="card-instructions-row-mini" style={{ marginTop: '0.75rem', padding: '0.5rem', backgroundColor: '#fcfcfc', borderRadius: '4px', border: '1px dashed #e2e8f0', fontSize: '0.8rem' }}>
+                  <p style={{ margin: 0 }}><strong>Instructions:</strong> {internship.application_instructions}</p>
+                </div>
+                
+                <div style={{ marginTop: '0.4rem', marginBottom: '0.75rem', fontSize: '0.8rem', display: 'flex', gap: '0.5rem' }}>
+                  <span>Status: <strong className={`status-pill status-${internship.status.toLowerCase().replace(/ /g, '-')}`}>{internship.status}</strong></span>
+                </div>
+
                 <div className="card-footer-row">
                   <span className="deadline-info">📅 Deadline: <strong>{internship.deadline}</strong></span>
                   {internship.application_link ? (
@@ -656,7 +677,7 @@ export default function ResultsList({ results, onTrackOpportunity }) {
                   <span className="status-badge status-ineligible">✕ Ineligible</span>
                 </div>
                 <p className="not-eligible-reason">
-                  <strong>Exclusion Reason:</strong> {item.reason}
+                  <strong>Reason for Removal:</strong> {item.reason}
                 </p>
               </div>
             ))}

@@ -8,7 +8,7 @@ export default function StudentForm({ onSubmit, isLoading }) {
   const [year, setYear] = useState('III');
   const [cgpa, setCgpa] = useState('8.2');
   const [maxDurationWeeks, setMaxDurationWeeks] = useState('8');
-  const [examsEndDate, setExamsEndDate] = useState('15 Sept');
+  const [preferredStartDate, setPreferredStartDate] = useState('15 Sept');
   const [isParsing, setIsParsing] = useState(false);
 
   const handleResumeUpload = async (e) => {
@@ -41,41 +41,50 @@ export default function StudentForm({ onSubmit, isLoading }) {
 
   const loadDemoProfile = (profileType) => {
     switch (profileType) {
-      case 'mystery':
+      case 'case1': // 0 Eligible Cases
+        setSkills('Python');
+        setInterests('Data Science');
+        setProgramme('B.Tech ME'); // ME has no matches
+        setYear('I');
+        setCgpa('5.0');
+        setMaxDurationWeeks('8');
+        setPreferredStartDate('15 Sept');
+        break;
+      case 'case2': // ML Intern Closed
         setSkills('Python, Machine Learning, SQL, Figma');
         setInterests('AI/ML, Data Science, UI/UX Design');
         setProgramme('B.Tech CSE');
         setYear('III');
         setCgpa('8.2');
         setMaxDurationWeeks('8');
-        setExamsEndDate('15 Sept');
+        setPreferredStartDate('15 Sept');
         break;
-      case 'aiml':
-        setSkills('Python, Machine Learning, Deep Learning, PyTorch, SQL');
-        setInterests('AI/ML, Data Science');
+      case 'case3': // CGPA Constraint Case
+        setSkills('Python, Machine Learning, SQL, Figma');
+        setInterests('AI/ML, Data Science, UI/UX Design');
         setProgramme('B.Tech CSE');
         setYear('III');
-        setCgpa('8.5');
-        setMaxDurationWeeks('24');
-        setExamsEndDate('01 Sept');
-        break;
-      case 'webdev':
-        setSkills('HTML, CSS, JavaScript, React, Node.js, Git');
-        setInterests('Web Development, Mobile App Dev');
-        setProgramme('B.Tech IT');
-        setYear('II');
-        setCgpa('7.8');
-        setMaxDurationWeeks('12');
-        setExamsEndDate('10 Sept');
-        break;
-      case 'ineligible':
-        setSkills('Python, HTML');
-        setInterests('Cloud Computing, Cyber Security');
-        setProgramme('B.Tech ME');
-        setYear('I');
-        setCgpa('6.2');
+        setCgpa('8.2'); // student has 8.2 (Data Analytics needs 8.5)
         setMaxDurationWeeks('8');
-        setExamsEndDate('15 Sept');
+        setPreferredStartDate('15 Sept');
+        break;
+      case 'case4': // Duration Constraint Case
+        setSkills('HTML, CSS, JavaScript, Python, SQL');
+        setInterests('Web Development, Data Science');
+        setProgramme('B.Tech CSE');
+        setYear('III');
+        setCgpa('8.2');
+        setMaxDurationWeeks('12'); // starts with 12 (Web Dev Intern is 12 weeks and matches)
+        setPreferredStartDate('29 Aug');
+        break;
+      case 'case5': // Start Date Case
+        setSkills('Python, Machine Learning, SQL, Figma');
+        setInterests('AI/ML, Data Science, UI/UX Design');
+        setProgramme('B.Tech CSE');
+        setYear('III');
+        setCgpa('8.2');
+        setMaxDurationWeeks('8');
+        setPreferredStartDate('29 Aug'); // Available starting today (29 Aug)
         break;
       default:
         break;
@@ -112,7 +121,7 @@ export default function StudentForm({ onSubmit, isLoading }) {
       year,
       cgpa: numCgpa,
       max_duration_weeks: parseInt(maxDurationWeeks) || 8,
-      exams_end_date: examsEndDate.trim() || '15 Sept'
+      preferred_start_date: preferredStartDate.trim() || '15 Sept'
     });
   };
 
@@ -123,7 +132,7 @@ export default function StudentForm({ onSubmit, isLoading }) {
     setYear('I');
     setCgpa('');
     setMaxDurationWeeks('8');
-    setExamsEndDate('15 Sept');
+    setPreferredStartDate('15 Sept');
   };
 
   return (
@@ -132,19 +141,22 @@ export default function StudentForm({ onSubmit, isLoading }) {
 
       {/* Demo Presets Block */}
       <div className="demo-presets">
-        <span className="preset-label">Demo Profiles (Quick Load):</span>
+        <span className="preset-label">Demo Cases (Quick Load):</span>
         <div className="preset-buttons">
-          <button type="button" onClick={() => loadDemoProfile('mystery')} className="btn-preset btn-preset-mystery">
-            ✨ Mystery Case (Hackathon)
+          <button type="button" onClick={() => loadDemoProfile('case1')} className="btn-preset btn-preset-ineligible">
+            1️⃣ 0 Eligible Cases
           </button>
-          <button type="button" onClick={() => loadDemoProfile('aiml')} className="btn-preset btn-preset-ai">
-            🤖 AI/ML Preset
+          <button type="button" onClick={() => loadDemoProfile('case2')} className="btn-preset btn-preset-ai">
+            2️⃣ ML Intern Closed
           </button>
-          <button type="button" onClick={() => loadDemoProfile('webdev')} className="btn-preset btn-preset-web">
-            🌐 Web Dev Preset
+          <button type="button" onClick={() => loadDemoProfile('case3')} className="btn-preset btn-preset-mystery">
+            3️⃣ CGPA Constraint
           </button>
-          <button type="button" onClick={() => loadDemoProfile('ineligible')} className="btn-preset btn-preset-ineligible">
-            ⚠️ Ineligible Profile
+          <button type="button" onClick={() => loadDemoProfile('case4')} className="btn-preset btn-preset-web">
+            4️⃣ Duration Case (12w vs 8w)
+          </button>
+          <button type="button" onClick={() => loadDemoProfile('case5')} className="btn-preset btn-preset-mystery">
+            5️⃣ Start Date Case (Today vs 1w)
           </button>
         </div>
       </div>
@@ -260,12 +272,12 @@ export default function StudentForm({ onSubmit, isLoading }) {
         </div>
 
         <div className="form-group col">
-          <label htmlFor="exams-end">Exams End Date</label>
+          <label htmlFor="exams-end">Start Date</label>
           <input
             type="text"
             id="exams-end"
-            value={examsEndDate}
-            onChange={(e) => setExamsEndDate(e.target.value)}
+            value={preferredStartDate}
+            onChange={(e) => setPreferredStartDate(e.target.value)}
             placeholder="e.g. 15 Sept"
           />
         </div>

@@ -1624,6 +1624,18 @@ input:checked + .slider:before {
   color: #16a34a !important;
 }
 
+.status-open {
+  background-color: #dcfce7 !important;
+  color: #15803d !important;
+  border: 1px solid #bbf7d0 !important;
+}
+
+.status-closed {
+  background-color: #fee2e2 !important;
+  color: #b91c1c !important;
+  border: 1px solid #fecaca !important;
+}
+
 
 
 

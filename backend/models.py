@@ -8,7 +8,7 @@ class StudentProfile(BaseModel):
     year: str
     cgpa: float
     max_duration_weeks: Optional[int] = 8
-    exams_end_date: Optional[str] = "15 Sept"
+    preferred_start_date: Optional[str] = "15 Sept"
 
 class EligibilityCriteria(BaseModel):
     programme: str
@@ -26,6 +26,7 @@ class InternshipOpportunity(BaseModel):
     application_link: Optional[str] = None
     status: Optional[str] = "Open"
     start_date: Optional[str] = None
+    application_instructions: Optional[str] = None
 
 class RankedRecommendation(BaseModel):
     rank: int
@@ -41,6 +42,8 @@ class RankedRecommendation(BaseModel):
     application_link: Optional[str] = None
     duration: Optional[str] = None
     start_date: Optional[str] = None
+    status: Optional[str] = "Open"
+    application_instructions: Optional[str] = None
 
 class NotEligibleRecommendation(BaseModel):
     title: str

@@ -13,7 +13,8 @@
     "deadline": "10 Sept",
     "application_link": null,
     "status": "Closed",
-    "start_date": "12 Sept"
+    "start_date": "12 Sept",
+    "application_instructions": "Submit your resume to Placement Cell Coordinator in Room 102."
   },
   {
     "title": "Web Developer Intern",
@@ -29,7 +30,8 @@
     "deadline": "12 Sept",
     "application_link": null,
     "status": "Open",
-    "start_date": "20 Sept"
+    "start_date": "01 Sept",
+    "application_instructions": "Apply via the hiring link or register at the Web Development cell."
   },
   {
     "title": "Data Analytics Intern",
@@ -45,7 +47,8 @@
     "deadline": "15 Sept",
     "application_link": null,
     "status": "Open",
-    "start_date": "20 Sept"
+    "start_date": "20 Sept",
+    "application_instructions": "Upload resume on the campus portal under Data Analytics drive."
   },
   {
     "title": "Cloud Intern",
@@ -61,7 +64,8 @@
     "deadline": "18 Sept",
     "application_link": null,
     "status": "Open",
-    "start_date": "10 Sept"
+    "start_date": "10 Sept",
+    "application_instructions": "Apply on the cloud tech application portal."
   },
   {
     "title": "Python Developer Intern",
@@ -77,7 +81,8 @@
     "deadline": "29 Sept",
     "application_link": null,
     "status": "Open",
-    "start_date": "20 Sept"
+    "start_date": "20 Sept",
+    "application_instructions": "Send Github link and resume to hr@pycode.com."
   },
   {
     "title": "UI/UX Design Intern",
@@ -93,7 +98,8 @@
     "deadline": "19 Sept",
     "application_link": null,
     "status": "Open",
-    "start_date": "18 Sept"
+    "start_date": "18 Sept",
+    "application_instructions": "Upload Behance portfolio link on CreativeFlow Careers page."
   },
   {
     "title": "Deep Learning Specialist Intern",
@@ -109,7 +115,8 @@
     "deadline": "20 Sept",
     "application_link": "https://neurocore.ai/careers/intern",
     "status": "Open",
-    "start_date": "22 Sept"
+    "start_date": "22 Sept",
+    "application_instructions": "Apply directly on NeuroCore site; pass AI screening."
   },
   {
     "title": "DevOps Engineer Intern",
@@ -125,7 +132,8 @@
     "deadline": "25 Sept",
     "application_link": "https://cloudscale.com/intern-devops",
     "status": "Open",
-    "start_date": "25 Sept"
+    "start_date": "25 Sept",
+    "application_instructions": "Register on the CloudScale portal using campus credentials."
   },
   {
     "title": "iOS Developer Intern",
@@ -141,7 +149,8 @@
     "deadline": "15 Sept",
     "application_link": null,
     "status": "Open",
-    "start_date": "15 Sept"
+    "start_date": "15 Sept",
+    "application_instructions": "Submit Xcode projects link to AppPulse placement coordinator."
   },
   {
     "title": "Android Developer Intern",
@@ -157,6 +166,7 @@
     "deadline": "17 Sept",
     "application_link": "https://droidcraft.com/careers",
     "status": "Open",
-    "start_date": "18 Sept"
+    "start_date": "18 Sept",
+    "application_instructions": "Upload Kotlin project sample to DroidCraft portal."
   }
 ]

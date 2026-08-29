@@ -61,7 +61,7 @@ export default function App() {
           year: simYear,
           cgpa: parseFloat(simCgpa),
           max_duration_weeks: lastFormInput.max_duration_weeks || 8,
-          exams_end_date: lastFormInput.exams_end_date || "15 Sept"
+          preferred_start_date: lastFormInput.preferred_start_date || "15 Sept"
         };
 
         const data = await getRecommendations(payload);

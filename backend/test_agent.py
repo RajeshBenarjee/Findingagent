@@ -19,7 +19,7 @@ def test_recommendation_logic():
         year="III",
         cgpa=8.2,
         max_duration_weeks=8,
-        exams_end_date="15 Sept"
+        preferred_start_date="15 Sept"
     )
     
     res = get_recommendations(student, internships)
