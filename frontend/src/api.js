@@ -50,3 +50,37 @@ export async function sendEmailAlert(emailPayload) {
 
   return response.json();
 }
+
+export async function runWebScraper(apiKey) {
+  const response = await fetch(`${API_BASE_URL}/scrape`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ api_key: apiKey || null }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || 'Failed to run web scraper.');
+  }
+
+  return response.json();
+}
+
+export async function importScrapedOpportunities(opportunities) {
+  const response = await fetch(`${API_BASE_URL}/import-scraped`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(opportunities),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.detail || 'Failed to import scraped opportunities.');
+  }
+
+  return response.json();
+}

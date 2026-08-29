@@ -117,3 +117,48 @@ def trigger_email_alert(payload: EmailAlertRequest):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to trigger email alert: {str(e)}")
 
+from pydantic import BaseModel
+from typing import Optional
+
+class ScrapeRequest(BaseModel):
+    api_key: Optional[str] = None
+
+@app.post("/api/scrape")
+def scrape_tech_companies(payload: ScrapeRequest):
+    from scraper_agent import run_multi_agent_scrape
+    try:
+        res = run_multi_agent_scrape(payload.api_key)
+        return res
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to run multi-agent scrape: {str(e)}")
+
+@app.post("/api/import-scraped")
+def import_scraped_opportunities(payload: List[InternshipOpportunity]):
+    json_path = os.path.join(os.path.dirname(__file__), '..', 'data', 'internships.json')
+    try:
+        existing_data = []
+        if os.path.exists(json_path):
+            with open(json_path, 'r') as f:
+                existing_data = json.load(f)
+        
+        existing_keys = {f"{item['title']}-{item.get('organization', '')}" for item in existing_data}
+        
+        imported_count = 0
+        for item in payload:
+            key = f"{item.title}-{item.organization or ''}"
+            if key not in existing_keys:
+                existing_data.append(item.dict())
+                existing_keys.add(key)
+                imported_count += 1
+                
+        with open(json_path, 'w') as f:
+            json.dump(existing_data, f, indent=2)
+            
+        return {
+            "status": "success",
+            "message": f"Successfully imported {imported_count} new scraped opportunities into the finder pool!"
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to import opportunities: {str(e)}")
+
+

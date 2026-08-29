@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import StudentForm from './components/StudentForm';
 import ResultsList from './components/ResultsList';
+import CareerScraper from './components/CareerScraper';
 import { getRecommendations } from './api';
 
 export default function App() {
@@ -169,6 +170,13 @@ export default function App() {
           >
             📋 Application Tracker ({trackedApplications.length})
           </button>
+          <button 
+            type="button" 
+            className={`tab-btn ${activeTab === 'scraper' ? 'tab-btn-active' : ''}`}
+            onClick={() => setActiveTab('scraper')}
+          >
+            🤖 AI Career Scraper 🚀
+          </button>
         </div>
       </header>
 
@@ -261,7 +269,7 @@ export default function App() {
             )}
           </div>
         </main>
-      ) : (
+      ) : activeTab === 'tracker' ? (
         <main className="tracker-main">
           {/* Kanban Tracker Tab Panel */}
           <div className="tracker-header">
@@ -325,6 +333,10 @@ export default function App() {
               );
             })}
           </div>
+        </main>
+      ) : (
+        <main className="scraper-main" style={{ maxWidth: '1600px', width: '95%', margin: '2.5rem auto', padding: '0 1rem' }}>
+          <CareerScraper />
         </main>
       )}
 
